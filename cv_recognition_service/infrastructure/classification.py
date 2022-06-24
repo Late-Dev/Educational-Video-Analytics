@@ -1,7 +1,7 @@
 import numpy as np
 import cv2
 
-from cv_recognition_service.infrastructure.interface import ClassificationModel, ClassificationData
+from infrastructure.interface import ClassificationModel, ClassificationData
 
 
 class DummyClassifier(ClassificationModel):
@@ -19,9 +19,14 @@ class DummyClassifier(ClassificationModel):
         return cv2.resize(image, (224, 224))
 
 
-    def detector(self, image: np.ndarray):
+    def predict(self, image: np.ndarray):
         preprocessed_image = self._image_preprocessing(image)
         raw_predictions = self.model(preprocessed_image)
-        predictions = ClassificationData(raw_predictions[0], raw_predictions[1], raw_predictions[2])
-        return predictions
+        predicted_cls, cls_id, conf = raw_predictions[0], raw_predictions[1], raw_predictions[2]
+        
+        if conf > self.conf_thresh:
+            predictions = ClassificationData(predicted_cls, cls_id, conf)
+            return predictions
+        else:
+            return None
         
