@@ -7,13 +7,13 @@ from service.interface import BaseService, FrameData
 
 
 class DummyEmotionService(BaseService):
-
     def __init__(
-        self, 
-        detection_model: DetectionModel, 
-        classification_model: ClassificationModel, 
-        det_threshold=0.9, 
-        cls_thresh=0.9):
+        self,
+        detection_model: DetectionModel,
+        classification_model: ClassificationModel,
+        det_threshold=0.9,
+        cls_thresh=0.9,
+    ):
 
         self.detection_model = detection_model
         self.classification_model = classification_model
@@ -22,7 +22,9 @@ class DummyEmotionService(BaseService):
         detections_data = self.detection_model.detect(frame)
 
         cropped_images = self._crop_images(frame, detections_data)
-        classes_data = [self.classification_model.predict(img) for img in cropped_images]
+        classes_data = [
+            self.classification_model.predict(img) for img in cropped_images
+        ]
 
         frame_data = self._serialize_frame_data(detections_data, classes_data)
         plotted_frame = self._draw_predictions(frame, frame_data)

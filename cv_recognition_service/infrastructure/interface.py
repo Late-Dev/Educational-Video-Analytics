@@ -13,7 +13,6 @@ class ClassificationData:
 
 
 class ClassificationModel(ABC):
-
     @abstractmethod
     def _load_model(self, model_path: str):
         """
@@ -42,11 +41,11 @@ class DetectionData:
     width: int
     height: int
     score: float
+    face: np.ndarray
     class_name: str = "face"
 
 
 class DetectionModel:
-
     @abstractmethod
     def _load_model(self, model_path: str):
         """
