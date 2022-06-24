@@ -1,1 +1,1 @@
-# CVCore
+# Educational-Video-Analytics
