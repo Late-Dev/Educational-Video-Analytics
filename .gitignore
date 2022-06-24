@@ -6,3 +6,6 @@ venv
 
 *.mp4
 *.ipynb
+.vscode/
+models/
+*.jpg
