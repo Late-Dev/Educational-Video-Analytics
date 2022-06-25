@@ -6,10 +6,15 @@ import numpy as np
 
 
 @dataclass
-class ClassificationData:
+class Emotion:
     class_name: str
     class_id: str
     score: float
+
+
+@dataclass
+class ClassificationData:
+    emotions: List[Emotion]
 
 
 class ClassificationModel(ABC):

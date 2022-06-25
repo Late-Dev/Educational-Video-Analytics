@@ -4,11 +4,11 @@ from typing import List
 import numpy as np
 import cv2
 
-from cv_recognition_service.infrastructure.interface import (
+from infrastructure.interface import (
     DetectionModel,
     DetectionData,
 )
-from cv_recognition_service.infrastructure.retina_torch.retina_api import RetinaDetector
+from infrastructure.retina_torch.retina_api import RetinaDetector
 
 
 class DummyDetector(DetectionModel):
@@ -63,8 +63,8 @@ class RetinaTorchDetector(DetectionModel):
         return cv2.resize(image, (840, 840))
 
     def detect(self, image: np.ndarray) -> List[DetectionData]:
-        preprocessed_image = self._image_preprocessing(image)
-        raw_predictions = self._face_detector.get_faces(preprocessed_image)
+        # preprocessed_image = self._image_preprocessing(image)
+        raw_predictions = self._face_detector.get_faces(image)
         predictions = self._raw_to_data(raw_predictions)
         return predictions
 
@@ -81,7 +81,7 @@ class RetinaTorchDetector(DetectionModel):
             class_name = "face"
             if score > self.conf_thresh:
                 data_model = DetectionData(
-                    x_min, y_min, x_max, y_max, score, face, class_name
+                    x_min, y_min, x_max-x_min, y_max-y_min, score, face, class_name
                 )
                 data_list.append(data_model)
         return data_list

@@ -25,7 +25,8 @@ class DummyEmotionService(BaseService):
         classes_data = [
             self.classification_model.predict(img) for img in cropped_images
         ]
-
+        from pprint import pprint
+        pprint(classes_data)
         frame_data = self._serialize_frame_data(detections_data, classes_data)
         plotted_frame = self._draw_predictions(frame, frame_data)
         return plotted_frame

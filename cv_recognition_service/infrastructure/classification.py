@@ -5,7 +5,7 @@ import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
 
-from infrastructure.interface import ClassificationModel, ClassificationData
+from infrastructure.interface import ClassificationModel, ClassificationData, Emotion
 from infrastructure.networks.dan import DAN 
 
 
@@ -80,7 +80,28 @@ class DanClassifier(ClassificationModel):
         result_batch = result_batch.to(self.device)
         return result_batch
 
-    def predict(self, images_batch: np.ndarray):
+    def _one_image_preprocess(self, image: np.ndarray):
+        image = self._data_transforms(Image.fromarray(image))
+        image = image.view(1, 3, *self._image_size)
+        image = image.to(self.device)
+        return image
+
+
+    def predict(self, image: np.ndarray) -> ClassificationData:
+        preprocessed_image = self._one_image_preprocess(image)
+        with torch.no_grad():
+            out, _, _ = self._model(preprocessed_image)
+            probas = F.softmax(out, dim=1)
+        pred = [Emotion(
+                    class_name=self._labels[i],
+                    class_id=i,
+                    score=proba.item()
+                )
+                for i, proba in enumerate(probas[0])]
+        cls_data = ClassificationData(pred)
+        return cls_data
+
+    def predict_batch(self, images_batch: np.ndarray):
         preprocessed_image = self._image_preprocessing(images_batch)
 
         with torch.no_grad():
@@ -89,7 +110,7 @@ class DanClassifier(ClassificationModel):
 
         predictions = [
             [
-                ClassificationData(
+                Emotion(
                     class_name=self._labels[i],
                     class_id=i,
                     score=proba.item()
