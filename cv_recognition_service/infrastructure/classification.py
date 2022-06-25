@@ -52,13 +52,13 @@ class DanClassifier(ClassificationModel):
             ]
         )
         self._labels = (
-            "neutral",
-            "happy",
-            "sad",
-            "surprise",
-            "fear",
-            "disgust",
-            "anger",
+            "спокойствие",
+            "радость",
+            "грусть",
+            "удивление",
+            "страх",
+            "отвращение",
+            "гнев",
         )
 
 
