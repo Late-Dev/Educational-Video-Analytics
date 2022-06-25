@@ -115,11 +115,13 @@ const filteredvideos = computed(()=>{
 
 
 // const BUCKET_DOWNLOAD_NAME = 'http://localhost:9000/videos/' // processed-videos
-const BUCKET_DOWNLOAD_NAME = process.env.BUCKET_DOWNLOAD_NAME
+const BUCKET_DOWNLOAD_NAME = process.env.VUE_APP_BUCKET_DOWNLOAD_NAME
 
 onMounted(async ()=>{
     const resp = await getVideoList()
-    videos.value = resp.data.map((video)=>video.url=BUCKET_DOWNLOAD_NAME+video.url)
+    const data = resp.data
+    videos.value = data.map((video)=>{video.url=BUCKET_DOWNLOAD_NAME+video.url 
+    return video})
 })
 
 
