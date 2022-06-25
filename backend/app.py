@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import add_video_data, get_video_list_data, get_video_card_data
+from database import add_video_data, get_video_list_data, get_video_card_data, get_analytics_data
 from models import VideoSchema
 
 app = FastAPI()
@@ -50,3 +50,8 @@ async def get_video_list():
 async def get_video_card(_id: str):
     result = await get_video_card_data(_id)
     return result if result is not None else {'Error': 'Video not found'}
+
+@app.get("/get_analytics")
+async def get_analytics(filter_type: str=None, filter_value: str=None, group:str=None):
+    result = await get_analytics_data(filter_type, filter_value, group)
+    return result
