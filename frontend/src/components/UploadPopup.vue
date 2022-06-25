@@ -13,7 +13,7 @@
                     <BaseInput label="Класс"/>
                 </div>
                 <div class="upload-popup__time">
-                    <BaseSelect></BaseSelect>
+                    <BaseSelect label="Время начала" :options="lessons" />
                 </div>
                 
             </div>
@@ -37,7 +37,7 @@ import BaseButton from "./BaseButton.vue";
 import BaseSelect from "./BaseSelect.vue";
 
 import { useMainStore } from "@/store/index";
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
 onMounted(()=>{
     window.addEventListener('keyup', escCloseModal)
@@ -53,6 +53,15 @@ function escCloseModal(e :any) {
     }
 }
 
+const lessons = ref([
+    {label:'8:30-9:15', value:'8:30'},
+    {label:'9:30-10:15', value:'9:30'},
+    {label:'10:30-11:15', value:'10:30'},
+    {label:'11:30-12:15', value:'11:30'},
+    {label:'12:30-13:15', value:'12:30'},
+    {label:'13:25-14:10', value:'13:25'},
+    {label:'14:25-15:10', value:'14:25'},
+    ])
 
 const mainStore = useMainStore();
 
