@@ -52,7 +52,7 @@ const mainStore = useMainStore();
         ul{
             margin: 0;
             display: flex;
-            gap: 74px;
+            gap: 60px;
             align-items: center;
             li{
                 list-style-type: none;

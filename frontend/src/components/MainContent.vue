@@ -7,11 +7,8 @@
     <div class="analytics" v-if="mainStore.page==='analytics'">
         аналитика
     </div>
-    <div class="upload" v-if="mainStore.page==='home'">
-
-    </div>
     <div class="gallery" v-if="mainStore.page==='gallery'">
-        галлерея
+        <GalleryPage></GalleryPage>
     </div>
 </template>
 
@@ -26,6 +23,7 @@ import analytics from "@/assets/analytics.svg"
 import upload from "@/assets/upload.svg"
 // @ts-ignore
 import gallery from "@/assets/gallery.svg"
+import GalleryPage from "./GalleryPage.vue";
 
 const mainStore = useMainStore();
 
