@@ -62,5 +62,13 @@ services:
     entrypoint: >
       /bin/sh -c " /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin; /usr/bin/mc mb myminio/videos; /usr/bin/mc policy set public myminio/videos; /usr/bin/mc mb myminio/processed-videos; /usr/bin/mc policy set public myminio/processed-videos; /usr/bin/mc mb myminio/preview-images; /usr/bin/mc policy set public myminio/preview-images; exit 0; "
 
+  infer:
+    runtime: nvidia
+    build: ./cv_recognition_service
+    command: python3 infer.py -i /data/input-videos -o /data/output
+    volumes:
+      - $PWD/cv_recognition_service/:/cv_recognition_service
+      - $PWD/data/:/data
+
 volumes:
   minio-storage:
