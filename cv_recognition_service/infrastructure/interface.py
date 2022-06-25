@@ -46,6 +46,7 @@ class DetectionData:
     x_max: int
     y_max: int
     score: float
+    face: np.ndarray = None
     class_name: str = "Face"
     tracking_id: int = None
     activity: int = 0
