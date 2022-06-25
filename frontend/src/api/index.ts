@@ -20,3 +20,7 @@ export function isAlive() {
 export function addVideo(payload: Video){
     return axios.post('/add_video', payload)
 }
+
+export function getVideoList(){
+    return axios.get('/get_video_list')
+}
