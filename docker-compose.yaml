@@ -18,16 +18,16 @@ services:
       - BUCKET_DOWNLOAD_NAME=http://localhost:9000/processed-videos/
       - API_URL=http://localhost:8000
 
-  # cv-service:
-  #   runtime: nvidia
-  #   build: ./cv_recognition_service
-  #   # command: mkdir output/ && mkdir tmp/
-  #   ports:
-  #     - 9988:9988
-  #   environment:
-  #     - MONGO_HOST=mongo
-  #   volumes:
-  #     - $PWD/cv_recognition_service/:/cv_recognition_service
+  cv-service:
+    runtime: nvidia
+    build: ./cv_recognition_service
+    # command: mkdir output/ && mkdir tmp/
+    ports:
+      - 9988:9988
+    environment:
+      - MONGO_HOST=mongo
+    volumes:
+      - $PWD/cv_recognition_service/:/cv_recognition_service
 
   mongo:
     image: mongo
