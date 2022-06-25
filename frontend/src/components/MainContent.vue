@@ -11,9 +11,7 @@
         <GalleryPage></GalleryPage>
     </div>
     <div class="videoanalytics" v-if="mainStore.page==='videoanalytics'">
-        <EmptyCard>
-            <video :src="mainStore.video.url" controls></video>
-        </EmptyCard>
+        <VideoAnalyticsPage></VideoAnalyticsPage>
     
     </div>
 </template>
@@ -21,7 +19,6 @@
 <script setup lang="ts">
 import { useMainStore } from "@/store/index";
 import MainCard from "./MainCard.vue"
-import EmptyCard from "./EmptyCard.vue"
 import { ref } from "vue";
 
 // @ts-ignore
@@ -31,6 +28,7 @@ import upload from "@/assets/upload.svg"
 // @ts-ignore
 import gallery from "@/assets/gallery.svg"
 import GalleryPage from "./GalleryPage.vue";
+import VideoAnalyticsPage from "./VideoAnalyticsPage.vue";
 
 const mainStore = useMainStore();
 
