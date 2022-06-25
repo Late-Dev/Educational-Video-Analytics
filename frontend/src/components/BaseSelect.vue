@@ -10,7 +10,7 @@
     
         <div class="select-menu" :class="{'select-menu--opened': opened}">
             <ul>
-                <li @click="handleChoose(option)" v-for="option in options" :key="option.value" >                
+                <li @click="handleChoose(option)" v-for="option in options" :key="option " >                
                     {{option.label}}
                 </li>
 
@@ -50,7 +50,7 @@ function handleFocusOut(){
 }
 
 function handleChoose(opt){
-    selectedValue.value = opt.value
+    selectedValue.value = opt.value ?? opt.name
     opened.value = false
     emits('input', selectedValue.value)
 }

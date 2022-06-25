@@ -5,6 +5,19 @@
             <template #header>
                 Фильтр
             </template>
+            <div class="filter__filters">           
+                <div class="filter__row">
+
+                    
+                    <BaseSelect label="Предмет"  :options="filter.subOption"></BaseSelect>
+                    <BaseSelect label="Класс" class="filter__class" :options="filter.classOption"></BaseSelect>
+                    <BaseSelect label="Преподаватель"  :options="filter.teacherOption"></BaseSelect>
+                </div>
+                <div class="filter__datetime">
+                    <BaseSelect label="Время начала"  :options="lessons"></BaseSelect>
+                    <BaseSelect label="Дата"  :options="filter.datesoption"></BaseSelect>
+                </div>
+             </div>
 
         </EmptyCard>
         <div class="gallery__videos">
@@ -14,13 +27,47 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import BaseHeader from './BaseHeader.vue'
 import EmptyCard from './EmptyCard.vue';
 import {getVideoList} from '@/api/index';
 import VideoCard from './VideoCard.vue';
+import BaseSelect from './BaseSelect.vue';
 
 const videos = ref([])
+
+const filter = computed(()=>{
+    const subjects = [...new Set(videos.value.map((item)=>item.subject))]
+    const classes = [...new Set(videos.value.map((item)=>item.school_class))]
+    const teachers = [...new Set(videos.value.map((item)=>item.teacher))]
+
+    const subOption = subjects.map(item=>({label:item, value: item}))
+    const classOption = classes.map(item=>({label:item, value: item}))
+    const teacherOption = teachers.map(item=>({label:item, value: item}))
+
+    const dates = [...new Set(videos.value.map((item)=>{
+        const dt = Date.parse(item.lesson_start_time)
+        const fulldate = new Date(dt)
+        const day = fulldate.toLocaleDateString()
+        return day
+        }))]
+
+    const datesoption = dates.map(item=>({label:item, value: item}))
+     
+    return {subOption, classOption, teacherOption, datesoption}
+})
+
+
+const lessons = ref([
+    {label:'8:30-9:15', value:'8:30'},
+    {label:'9:30-10:15', value:'9:30'},
+    {label:'10:30-11:15', value:'10:30'},
+    {label:'11:30-12:15', value:'11:30'},
+    {label:'12:30-13:15', value:'12:30'},
+    {label:'13:25-14:10', value:'13:25'},
+    {label:'14:25-15:10', value:'14:25'},
+    ])
+
 
 onMounted(async ()=>{
     const resp = await getVideoList()
@@ -39,6 +86,30 @@ onMounted(async ()=>{
         display: flex;
         gap: 30px;
         flex-wrap: wrap;
+    }
+}
+
+.filter{
+    &__row{
+        display: flex;
+        width: 825px;
+        gap: 25px;
+    }
+
+    &__item{
+        flex-shrink: 2;
+    }
+    &__class{
+        max-width: 160px;
+    }
+    &__filters{
+        display: flex;
+    }
+    &__datetime{
+        display: flex;
+        margin-left: 75px;
+        flex-grow: 1;
+        gap: 25px;
     }
 }
 </style>

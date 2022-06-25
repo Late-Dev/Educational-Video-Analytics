@@ -71,6 +71,16 @@ defineProps({
         line-height: 28px;        letter-spacing: 0.75px;
         color: #A0A3BD;
     }
+    &__subtitle{
+        font-style: normal;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        letter-spacing: 0.75px;
+        color: #A0A3BD;
+
+
+    }
 }
 
 </style>
