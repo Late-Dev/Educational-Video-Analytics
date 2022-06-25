@@ -8,22 +8,26 @@ services:
       - 8000:8000
     environment:
       - MONGO_HOST=mongo
-    
+
   frontend:
     build: ./frontend
     ports:
       - 8080:8080
-
-  cv-service:
-    runtime: nvidia
-    build: ./cv_recognition_service
-    # command: mkdir output/ && mkdir tmp/
-    ports:
-      - 9988:9988
     environment:
-      - MONGO_HOST=mongo
-    volumes:
-      - $PWD/cv_recognition_service/:/cv_recognition_service
+      - BUCKET_UPLOAD_NAME=http://localhost:9000/videos/
+      - BUCKET_DOWNLOAD_NAME=http://localhost:9000/processed-videos/
+      - API_URL=http://localhost:8000
+
+  # cv-service:
+  #   runtime: nvidia
+  #   build: ./cv_recognition_service
+  #   # command: mkdir output/ && mkdir tmp/
+  #   ports:
+  #     - 9988:9988
+  #   environment:
+  #     - MONGO_HOST=mongo
+  #   volumes:
+  #     - $PWD/cv_recognition_service/:/cv_recognition_service
 
   mongo:
     image: mongo
@@ -60,16 +64,7 @@ services:
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb myminio/videos;
-      /usr/bin/mc policy set public myminio/videos;
-      /usr/bin/mc mb myminio/processed-videos;
-      /usr/bin/mc policy set public myminio/processed-videos;
-      /usr/bin/mc mb myminio/preview-images;
-      /usr/bin/mc policy set public myminio/preview-images;
-      exit 0;
-      "
+      /bin/sh -c " /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin; /usr/bin/mc mb myminio/videos; /usr/bin/mc policy set public myminio/videos; /usr/bin/mc mb myminio/processed-videos; /usr/bin/mc policy set public myminio/processed-videos; /usr/bin/mc mb myminio/preview-images; /usr/bin/mc policy set public myminio/preview-images; exit 0; "
 
 volumes:
   minio-storage:
