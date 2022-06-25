@@ -1,0 +1,9 @@
+numpy
+opencv-python
+tqdm
+matplotlib
+torch
+torchvision
+scikit-image
+pymongo==4.1.1
+tensorflow-gpu
