@@ -10,8 +10,10 @@
     <div class="gallery" v-if="mainStore.page==='gallery'">
         <GalleryPage></GalleryPage>
     </div>
-    <div class="videoanalutics" v-if="mainStore.page==='videoanalytics'">
-    
+    <div class="videoanalytics" v-if="mainStore.page==='videoanalytics'">
+        <EmptyCard>
+            <video :src="mainStore.video.url" controls></video>
+        </EmptyCard>
     
     </div>
 </template>
@@ -19,6 +21,7 @@
 <script setup lang="ts">
 import { useMainStore } from "@/store/index";
 import MainCard from "./MainCard.vue"
+import EmptyCard from "./EmptyCard.vue"
 import { ref } from "vue";
 
 // @ts-ignore
@@ -62,11 +65,17 @@ cards.value = {
 
 </script>
 
-<style>
+<style lang="scss">
 
 .home-page{
     display: flex;
     justify-content: space-between;
+}
+
+.videoanalytics{
+    video{
+        width: 100%;
+    }
 }
 
 </style>

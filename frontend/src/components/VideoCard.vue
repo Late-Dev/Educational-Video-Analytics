@@ -1,6 +1,8 @@
 <template>
-    <div class="video-card">
-        <div class="video-card__preview"></div>
+    <div class="video-card" >
+        <div class="video-card__preview">
+            <video :src="video.url" s></video>
+        </div>
         <div class="video-card__date">{{ videotime}}</div>
         <div class="video-card__desc">
             <div class="video-card__subtitle">Предмет</div>
@@ -39,6 +41,7 @@ import { defineProps } from 'vue';
 //     }
 // })
 
+
 const props = defineProps({
     video: {
         type: Object
@@ -46,6 +49,7 @@ const props = defineProps({
 })
 
 const videotime = computed(()=>{
+    console.log(props.video)
     const itemtime = props.video.lesson_start_time
     const dt = Date.parse(itemtime)
     const fulldate = new Date(dt)
@@ -66,12 +70,19 @@ const videotime = computed(()=>{
     box-sizing: border-box;
     box-shadow: 0px 8px 16px rgba(17, 17, 17, 0.06);
     border-radius: 12px;
+    cursor: pointer;
+
     &__preview{
         width: 100%;
         min-height: 200px;
         background-color: grey;
         box-shadow: 0px 8px 16px rgba(17, 17, 17, 0.04);
         border-radius: 12px;
+        overflow: hidden;
+        video{
+            width:  100%;
+            height: 100%;
+        }
     }
     &__date{
         text-align: end;

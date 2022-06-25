@@ -19,7 +19,7 @@
 
         </EmptyCard>
         <div class="gallery__videos">
-            <VideoCard v-for="video in filteredvideos" :video="video" :key="video" />
+            <VideoCard @click="openVideo(video)" v-for="video in filteredvideos" :video="video" :key="video" />
         </div>
     </div>
 </template>
@@ -31,6 +31,10 @@ import EmptyCard from './EmptyCard.vue';
 import {getVideoList} from '@/api/index';
 import VideoCard from './VideoCard.vue';
 import BaseSelect from './BaseSelect.vue';
+import { useMainStore } from "@/store/index";
+
+const mainStore = useMainStore();
+
 
 const videos = ref([])
 
@@ -74,6 +78,12 @@ const lessons = ref([
 
 
 
+
+function openVideo(video){
+    console.log(video)
+    mainStore.changePage('videoanalytics')
+    mainStore.video = video
+}
 
 const filteredvideos = computed(()=>{
     return videos.value.filter((video)=>{

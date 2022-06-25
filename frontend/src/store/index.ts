@@ -2,7 +2,8 @@ import { defineStore } from "pinia";
 
 export type RootState = {
     page: String,
-    popupOpened: boolean
+    popupOpened: boolean,
+    video: any
 }
 
 
@@ -10,7 +11,8 @@ export const useMainStore = defineStore({
     id: "mainStore",
     state: ()=>({
         page: 'home',
-        popupOpened: false
+        popupOpened: false,
+        video: {}
     } as RootState),
     actions: {
         changePage(page: String){
