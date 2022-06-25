@@ -37,7 +37,7 @@ def process_video(video_path: str):
 
     emotion_average = dict()
 
-    names = open('names.txt').readlines()
+    names = [name.strip() for name in open('names.txt').readlines()]
     shuffle(names)
     line_data = {}
     
