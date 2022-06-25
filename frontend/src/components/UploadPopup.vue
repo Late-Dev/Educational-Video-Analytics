@@ -2,29 +2,45 @@
 
     <div class="upload-popup__wrapper" @click.self="mainStore.closePopup" >
         <div class="upload-popup" >
-            <div class="upload-popup__close"  @click="mainStore.closePopup">
-                <img src="@/assets/close.svg" alt="">
-            </div>
-            <div>
-                <DragNDrop @upload="videoUpload"></DragNDrop>
-            </div>
-            <div class="upload-popup__row">
-                <div class="upload-popup__class">
-                    <BaseInput @update:model-value="(data)=>{payload.school_class = data}" label="Класс"/>
+            <div v-if="!success">
+                <div class="upload-popup__close"  @click="mainStore.closePopup">
+                    <img src="@/assets/close.svg" alt="">
                 </div>
-                <div class="upload-popup__time">
-                    <BaseSelect @input="handleData" label="Время начала" :options="lessons" />
+                <div>
+                    <DragNDrop @upload="videoUpload"></DragNDrop>
                 </div>
-                
+                <div class="upload-popup__row">
+                    <div class="upload-popup__class">
+                        <BaseInput @update:model-value="(data)=>{payload.school_class = data}" label="Класс"/>
+                    </div>
+                    <div class="upload-popup__time">
+                        <BaseSelect @input="handleData" label="Время начала" :options="lessons" />
+                    </div>
+                    
+                </div>
+                <div class="upload-popup__row">
+                    <BaseInput @update:model-value="(data)=>{payload.subject = data}" label="Предмет"/>
+                </div>
+                <div class="upload-popup__row">
+                    <BaseInput @update:model-value="(data)=>{payload.teacher = data}" label="Преподаватель"/>
+                </div>
+                <div class="upload-popup__row">
+                    <BaseButton @click="submitVideo" :disabled="sending" type="secondary" class="upload-popup__button">Загрузить</BaseButton>
+                </div>
             </div>
-            <div class="upload-popup__row">
-                <BaseInput @update:model-value="(data)=>{payload.subject = data}" label="Предмет"/>
-            </div>
-            <div class="upload-popup__row">
-                <BaseInput @update:model-value="(data)=>{payload.teacher = data}" label="Преподаватель"/>
-            </div>
-            <div class="upload-popup__row">
-                <BaseButton @click="submitVideo" type="secondary" class="upload-popup__button">загрузить</BaseButton>
+            <div v-if="success">
+                <div class="upload-popup__close"  @click="mainStore.closePopup">
+                    <img src="@/assets/close.svg" alt="">
+                </div>
+                <div class="upload-popup__success">
+                    <img src="@/assets/Success.svg" alt="">
+                </div>
+                <div class="upload-popup__success-info">
+                    <h2>Успех!</h2>
+                        После того как видео обработается вы сможете посмотреть аналитику по нему в видеогалереe
+                </div>
+                <BaseButton @click="mainStore.closePopup"  type="secondary" class="upload-popup__button">Хорошо</BaseButton>
+            
             </div>
         </div>
     </div>
@@ -74,8 +90,18 @@ function escCloseModal(e: any) {
     }
 }
 
-function submitVideo(){
-    addVideo(payload.value)
+const sending = ref(false)
+const success = ref(false)
+
+async function submitVideo(){
+    sending.value = true
+    addVideo(payload.value).then(()=>{
+        sending.value = false
+        success.value = true
+    }).catch((error)=>{
+        console.log(error)
+        sending.value = false
+    })
 }
 
 const lessons = ref([
@@ -139,6 +165,34 @@ function videoUpload(url: String){
     &__button{
         margin: auto;
         width: 258px;
+    }
+
+    &__success{
+        top:-10px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        img{
+            margin-top: -20px;
+        }
+        &-info{
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 28px;
+            text-align: center;
+
+            letter-spacing: 0.75px;
+            margin-bottom: 20px;
+
+            h2{
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 28px;
+
+                text-align: center;
+                letter-spacing: 0.75px;
+            }
+        }
     }
 }
 

@@ -10,6 +10,10 @@
     <div class="gallery" v-if="mainStore.page==='gallery'">
         <GalleryPage></GalleryPage>
     </div>
+    <div class="videoanalutics" v-if="mainStore.page==='videoanalytics'">
+    
+    
+    </div>
 </template>
 
 <script setup lang="ts">
