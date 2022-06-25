@@ -3,8 +3,6 @@ from typing import Any, Tuple
 from pathlib import Path
 import sys
 
-from pyrsistent import m
-
 sys.path.append(
     "/home/and/projects/hacks/hacks_ai_ural_emotion_recognition/APP/Educational-Video-Analytics/cv_recognition_service/infrastructure/networks"
 )
@@ -18,7 +16,6 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision import transforms
 from PIL import Image
 from tqdm.auto import tqdm
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
 from dan import DAN
 from torchvision import models
 
