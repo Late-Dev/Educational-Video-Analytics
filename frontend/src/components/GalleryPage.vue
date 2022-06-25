@@ -6,22 +6,20 @@
                 Фильтр
             </template>
             <div class="filter__filters">           
-                <div class="filter__row">
-
-                    
-                    <BaseSelect label="Предмет"  :options="filter.subOption"></BaseSelect>
-                    <BaseSelect label="Класс" class="filter__class" :options="filter.classOption"></BaseSelect>
-                    <BaseSelect label="Преподаватель"  :options="filter.teacherOption"></BaseSelect>
+                <div class="filter__row">                    
+                    <BaseSelect @input="(value)=>{ subfilter = value}"  label="Предмет" :options="filter.subOption"></BaseSelect>
+                    <BaseSelect @input="(value)=>{ classfilter = value}" label="Класс" class="filter__class" :options="filter.classOption"></BaseSelect>
+                    <BaseSelect label="Преподаватель"  @input="(value)=>{ teacherfilter = value}"  :options="filter.teacherOption"></BaseSelect>
                 </div>
                 <div class="filter__datetime">
-                    <BaseSelect label="Время начала"  :options="lessons"></BaseSelect>
-                    <BaseSelect label="Дата"  :options="filter.datesoption"></BaseSelect>
+                    <BaseSelect @input="(value)=>{ timefilter = value}"  label="Время начала"  :options="lessons"></BaseSelect>
+                    <BaseSelect @input="(value)=>{ datesfilter = value}"  label="Дата"  :options="filter.datesoption"></BaseSelect>
                 </div>
              </div>
 
         </EmptyCard>
         <div class="gallery__videos">
-            <VideoCard v-for="video in videos" :video="video" :key="video" />
+            <VideoCard v-for="video in filteredvideos" :video="video" :key="video" />
         </div>
     </div>
 </template>
@@ -57,6 +55,12 @@ const filter = computed(()=>{
     return {subOption, classOption, teacherOption, datesoption}
 })
 
+const subfilter = ref('')
+const classfilter = ref('')
+const teacherfilter = ref('')
+const timefilter = ref('')
+const datesfilter = ref('')
+
 
 const lessons = ref([
     {label:'8:30-9:15', value:'8:30'},
@@ -67,6 +71,39 @@ const lessons = ref([
     {label:'13:25-14:10', value:'13:25'},
     {label:'14:25-15:10', value:'14:25'},
     ])
+
+
+
+
+const filteredvideos = computed(()=>{
+    return videos.value.filter((video)=>{
+        if(subfilter.value && video.subject !== subfilter.value){
+            return
+        }
+        if(classfilter.value && video.school_class !== classfilter.value){
+            return
+        }
+        if(teacherfilter.value && video.teacher !== teacherfilter.value){
+            return
+        }
+        const videotime = video.lesson_start_time
+        const dt = Date.parse(videotime)
+        const fulldate = new Date(dt)
+        const day = fulldate.toLocaleDateString()
+
+        const lsntime = fulldate.getHours()+':'+fulldate.getMinutes()
+
+        if(timefilter.value && lsntime !== timefilter.value){
+            return
+        }
+        if(datesfilter.value && day !== datesfilter.value){
+            return
+        }
+
+        return video
+    })
+})
+
 
 
 onMounted(async ()=>{

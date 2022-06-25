@@ -23,7 +23,7 @@
 <script setup >
 import { ref, defineProps, defineEmits } from 'vue';
 
-const emits = defineEmits('input')
+const emits = defineEmits({input: String})
 
 defineProps({
     label:{
