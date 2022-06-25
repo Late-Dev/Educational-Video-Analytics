@@ -13,10 +13,6 @@ services:
     build: ./frontend
     ports:
       - 8080:8080
-    environment:
-      - VUE_APP_BUCKET_UPLOAD_NAME=http://10.10.67.125:9000/videos/
-      - VUE_APP_BUCKET_DOWNLOAD_NAME=http://10.10.67.125:9000/processed-videos/
-      - VUE_APP_API_URL=http://10.10.67.125:8000
 
   cv-service:
     runtime: nvidia

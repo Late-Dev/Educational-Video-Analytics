@@ -22,7 +22,6 @@ def upload_preview_handler(filepath: str, task: dict):
 def process_video_handler(filepath: str, task: dict):
     # start video processing
     output_filepath, bar_data, line_data = process_video(filepath)
-    print(line_data)
     # upload processed file to bucket
     url = "http://minio:9000/processed-videos/"
     filename = os.path.basename(output_filepath)

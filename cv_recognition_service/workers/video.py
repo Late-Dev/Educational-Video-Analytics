@@ -80,7 +80,6 @@ def process_video(video_path: str):
                 all_students[emotion][i] += value / len(line_data)
 
     line_data['Весь класс'] = all_students
-
     writer.release() 
     capture.release()
     return out_path, bar_data, line_data
