@@ -17,7 +17,7 @@ from infrastructure.interface import ClassificationModel, ClassificationData
 @dataclass
 class FrameData:
     faces_detections: List[DetectionData]
-    classes_data: List[ClassificationData]
+    predicted_emotions: List[ClassificationData]
 
 
 class BaseService(ABC):
@@ -35,7 +35,7 @@ class BaseService(ABC):
     def _crop_images(image: np.ndarray, det_predictions: List[DetectionData]):
         cropped_images = []
         for det_data in det_predictions:
-            cropped = image[det_data.y_min:det_data.y_min+det_data.height, det_data.x_min:det_data.x_min+det_data.width]
+            cropped = image[det_data.y_min:det_data.y_max, det_data.x_min:det_data.x_max]
             cropped_images.append(cropped)
         return cropped_images
 
@@ -49,14 +49,15 @@ class BaseService(ABC):
         detections = frame_data.faces_detections
         
         for coords in detections:
-            cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_min+coords.width, coords.y_min+coords.height), color, thickness)
+            cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_max, coords.y_max), color, thickness)
+            cv2.putText(frame, f'#{coords.tracking_id}', (coords.x_min, coords.y_min), font, fontScale, color, thickness, cv2.LINE_AA)
 
         emotion_average = dict()
-        classes_data = frame_data.classes_data
-        for data in classes_data:
+        face_emotions = frame_data.predicted_emotions
+        for data in face_emotions:
             for emotion in data.emotions:
                 emotion_average.setdefault(emotion.class_name, 0) 
-                emotion_average[emotion.class_name] += emotion.score / len(classes_data)
+                emotion_average[emotion.class_name] += emotion.score / len(face_emotions)
         names = list(sorted(emotion_average.keys()))
         values = [emotion_average[i] for i in names]
         
@@ -67,11 +68,10 @@ class BaseService(ABC):
         ax.barh(names, values)
         canvas.draw()       # draw the canvas, cache the renderer
         bar_image = np.frombuffer(canvas.tostring_rgb(), dtype='uint8').reshape((frame.shape[0], frame.shape[0], 3))
-
         return np.hstack([frame, bar_image])
 
     @staticmethod
-    def _serialize_frame_data(detections_data: DetectionData, classes_data: ClassificationData):
+    def _serialize_frame_data(detections_data: List[DetectionData], classes_data: ClassificationData):
         detections = []
         pred_classes = []
         for det, cls_data in zip(detections_data, classes_data):
