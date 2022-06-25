@@ -1,13 +1,15 @@
 import os
 from time import sleep
-from turtle import up
+from pathlib import Path
 
-from building import build_emotion_service
-from workers.video import process_video
 from transport.database import StatusEnum, find_task, update_task
 from transport.s3 import download_file
-from handlers import upload_preview_handler, process_video_handler
+from handlers import process_video_handler, upload_preview_handler
 
+
+def clean_tmp_dirs(dirs=['/cv_recognition_service/tmp/', '/cv_recognition_service/tmp/output']):
+    for dir in dirs:
+        [f.unlink() for f in Path(dir).glob("*") if f.is_file()] 
 
 
 def main(sleep_range: float):
@@ -35,6 +37,7 @@ def main(sleep_range: float):
             # call processing handler
             try:
                 process_video_handler(file_path, task)
+                clean_tmp_dirs()
             except Exception as err:
                 error = f"Error while processing video file: {file_url} \n Error: {err}"
                 update_task(task, {"status": StatusEnum.error})
