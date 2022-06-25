@@ -6,7 +6,7 @@
                 <div class="video-card__status-test" 
                 :class="{
                     'video-card__status-test--uploaded': video.status==='uploaded' ||video.status==='processing' ,
-                    'video-card__status-test--success': video.status==='success',
+                    'video-card__status-test--success': video.status==='ready',
                     'video-card__status-test--error': video.status==='error',
 
                     }">{{video.status}}</div>
@@ -128,7 +128,8 @@ const videotime = computed(()=>{
         text-align: end;
         font-weight: 400;
         font-size: 16px;
-        line-height: 28px;        letter-spacing: 0.75px;
+        line-height: 28px;        
+        letter-spacing: 0.75px;
         color: #A0A3BD;
     }
     &__subtitle{
