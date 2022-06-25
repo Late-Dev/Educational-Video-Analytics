@@ -37,4 +37,6 @@ async def get_video_list_data():
 
 async def get_video_card_data(_id):
     card = await lesson_videos_collection.find_one({'_id': ObjectId(_id)})
+    if card is not None:
+        card['_id'] = str(card['_id'])
     return card

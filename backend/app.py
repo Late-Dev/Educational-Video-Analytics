@@ -48,5 +48,5 @@ async def get_video_list():
 
 @app.get("/get_video_card")
 async def get_video_card(_id: str):
-    result = await get_video_card_data()
+    result = await get_video_card_data(_id)
     return result if result is not None else {'Error': 'Video not found'}
