@@ -44,7 +44,7 @@ class DanClassifier(ClassificationModel):
         self._model = self._load_model(model_path)
         self._data_transforms = transforms.Compose(
             [
-                transforms.Resize((224, 224)),
+                transforms.Resize(image_size),
                 transforms.ToTensor(),
                 transforms.Normalize(
                     mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
@@ -63,7 +63,7 @@ class DanClassifier(ClassificationModel):
 
 
     def _load_model(self, model_path: str):
-        model = DAN(num_head=4, num_class=7, pretrained=False)
+        model = DAN(num_head=4, num_class=7)
         checkpoint = torch.load(model_path, map_location=self.device)
         model.load_state_dict(checkpoint["model_state_dict"], strict=True)
         model.to(self.device)
