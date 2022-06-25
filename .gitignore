@@ -1,4 +1,10 @@
 .devcontainer/*
-backend/__pycache__/*
 venv
 .DS_Store
+*.ipynb_checkpoints
+*__pycache__
+
+*.mp4
+.vscode/
+models/
+*.jpg
