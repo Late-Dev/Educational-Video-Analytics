@@ -28,7 +28,7 @@ def process_video(video_path: str):
         if frame is None:
             break
         new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        plotted_frame = service.process_frame(new_frame)
+        plotted_frame, frame_data = service.process_frame(new_frame)
         writer.write(cv2.cvtColor(plotted_frame, cv2.COLOR_RGB2BGR))
 
     writer.release() 
