@@ -42,27 +42,17 @@ class BaseService(ABC):
         color = (0, 255, 0)
         
         detections = frame_data.faces_detections
-        classes_data = frame_data.classes_data
-        for coords, cls_data in zip(detections, classes_data):
+        # classes_data = frame_data.classes_data
+        for coords in detections:
             cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_min+coords.width, coords.y_min+coords.height), color, thickness)
-            cv2.putText(
-                frame, 
-                f'#{cls_data.class_name}', 
-                (coords.x_min, coords.y_min), 
-                font, 
-                fontScale, 
-                color, 
-                thickness, 
-                cv2.LINE_AA)
         return frame
 
     @staticmethod
     def _serialize_frame_data(detections_data: DetectionData, classes_data: ClassificationData):
         detections = []
         pred_classes = []
-        for det, cls in zip(detections_data, classes_data):
-            if cls != None:
-                detections.append(det)
-                pred_classes.append(cls)
+        for det, cls_data in zip(detections_data, classes_data):
+            detections.append(det)
+            pred_classes.append(cls_data)
         frame_data = FrameData(detections, pred_classes)
         return frame_data

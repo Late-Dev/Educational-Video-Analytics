@@ -6,14 +6,18 @@ import numpy as np
 
 
 @dataclass
-class ClassificationData:
+class Emotion:
     class_name: str
     class_id: str
     score: float
 
 
-class ClassificationModel(ABC):
+@dataclass
+class ClassificationData:
+    emotions: List[Emotion]
 
+
+class ClassificationModel(ABC):
     @abstractmethod
     def _load_model(self, model_path: str):
         """
@@ -42,11 +46,11 @@ class DetectionData:
     width: int
     height: int
     score: float
+    face: np.ndarray
     class_name: str = "face"
 
 
 class DetectionModel:
-
     @abstractmethod
     def _load_model(self, model_path: str):
         """
