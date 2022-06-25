@@ -27,6 +27,6 @@ def process_video_handler(filepath: str, task: dict):
     filename = os.path.basename(output_filepath)
     res = upload_file(output_filepath, url)
     if res:
-        update_task(task, {"status": StatusEnum.ready, "output-file-url": f"{url}{filename}"})
+        update_task(task, {"status": StatusEnum.ready})
     else:
         update_task(task, {"status": StatusEnum.error})
