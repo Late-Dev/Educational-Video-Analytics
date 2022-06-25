@@ -42,7 +42,7 @@ class DummyDetector(DetectionModel):
             class_name = "face"
             if score > self.conf_thresh:
                 data_model = DetectionData(
-                    x_min, y_min, x_max, y_max, score, class_name
+                    x_min, y_min, x_max, y_max, score, face=None, class_name=class_name
                 )
                 data_list.append(data_model)
         return data_list

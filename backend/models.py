@@ -4,7 +4,7 @@ from pydantic import BaseModel, AnyUrl
 
 
 class VideoSchema(BaseModel):
-    url: AnyUrl
+    url: str
     school_class: str
     teacher: str
     subject: str
@@ -13,7 +13,7 @@ class VideoSchema(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "url": "s3://12345",
+                "url": "filename",
                 "school_class": "7А",
                 "teacher": "Иванова А.А.",
                 "subject": "Математика",

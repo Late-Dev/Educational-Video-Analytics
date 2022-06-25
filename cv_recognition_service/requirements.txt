@@ -6,3 +6,5 @@ torch
 torchvision
 scikit-image
 pandas
+pymongo==4.1.1
+tensorflow-gpu
