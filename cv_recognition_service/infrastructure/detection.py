@@ -18,7 +18,7 @@ class DummyDetector(DetectionModel):
 
     def _load_model(self, model_path: str):
         def empty(image: np.ndarray):
-            return [(274, 233, 120, 150, 0.98), (333, 201, 100, 120, 0.98)]
+            return [(274, 233, 300, 330, 0.98), (333, 201, 433, 320, 0.98)]
 
         return empty
 
@@ -81,7 +81,7 @@ class RetinaTorchDetector(DetectionModel):
             class_name = "face"
             if score > self.conf_thresh:
                 data_model = DetectionData(
-                    x_min, y_min, x_max-x_min, y_max-y_min, score, face, class_name
+                    x_min, y_min, x_max, y_max, score, face, class_name
                 )
                 data_list.append(data_model)
         return data_list

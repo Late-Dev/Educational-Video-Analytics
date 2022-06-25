@@ -25,6 +25,7 @@ class RetinaDetector:
         self.model_path = (
             CURRENT_DIR / "../../models/face_search" / self.model_config["model_path"]
         )
+        print(f"Face detector model loaded from file: {self.model_config['model_path']}")
         self.model = RetinaFace(cfg=self.model_config, phase="test")
         self.detector = self.load_model(self.model)
         self.detector.eval()

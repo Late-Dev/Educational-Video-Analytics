@@ -43,12 +43,17 @@ class ClassificationModel(ABC):
 class DetectionData:
     x_min: int
     y_min: int
-    width: int
-    height: int
-    bbox: np.ndarray
+    x_max: int
+    y_max: int
     score: float
-    face: np.ndarray
-    class_name: str = "face"
+    class_name: str = "Face"
+    tracking_id: int = None
+    activity: int = 0
+
+    def __post_init__(self):
+        self.width = self.x_max - self.x_min
+        self.height = self.y_max - self.y_min
+        self.bbox = (self.x_min, self.y_min, self.width, self.height)
 
 
 class DetectionModel:
@@ -71,20 +76,3 @@ class DetectionModel:
         Get detections from the image
         """
         pass
-
-
-@dataclass
-class Coords:
-    x_min: int
-    y_min: int
-    x_max: int
-    y_max: int
-    score: float
-    tracking_id: int = None
-    class_name = "Face"
-    activity: int = 0
-
-    def __post_init__(self):
-        self.width = self.x_max - self.x_min
-        self.height = self.y_max - self.y_min
-        self.bbox = (self.x_min, self.y_min, self.width, self.height)
