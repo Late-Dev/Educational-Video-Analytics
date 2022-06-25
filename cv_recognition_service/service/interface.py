@@ -35,7 +35,7 @@ class BaseService(ABC):
     def _crop_images(image: np.ndarray, det_predictions: List[DetectionData]):
         cropped_images = []
         for det_data in det_predictions:
-            cropped = image[det_data.y_min:det_data.y_min+det_data.height, det_data.x_min:det_data.x_min+det_data.width]
+            cropped = image[det_data.y_min:det_data.y_max, det_data.x_min:det_data.x_max]
             cropped_images.append(cropped)
         return cropped_images
 
@@ -49,7 +49,8 @@ class BaseService(ABC):
         detections = frame_data.faces_detections
         
         for coords in detections:
-            cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_min+coords.width, coords.y_min+coords.height), color, thickness)
+            cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_max, coords.y_max), color, thickness)
+            cv2.putText(frame, f'#{coords.tracking_id}', (coords.x_min, coords.y_min), font, fontScale, color, thickness, cv2.LINE_AA)
 
         emotion_average = dict()
         face_emotions = frame_data.predicted_emotions

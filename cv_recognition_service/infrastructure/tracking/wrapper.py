@@ -1,6 +1,6 @@
 import numpy as np
 
-from infrastructure.interface import Coords
+from infrastructure.interface import DetectionData
 from infrastructure.tracking.deep_sort.nn_matching import (
     NearestNeighborDistanceMetric,
 )
@@ -53,7 +53,7 @@ class DeepsortTracker:
                 min(max(int(i), 0), 1700) for i in bbox.tolist()
             ]
 
-            det_obj = Coords(
+            det_obj = DetectionData(
                 x_min=x_min,
                 y_min=y_min,
                 x_max=x_max,
