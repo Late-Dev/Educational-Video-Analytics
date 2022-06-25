@@ -1,1 +1,0 @@
-docker run -ti -p 9988:9988 -v $PWD/:/cv-service emotion-cv
