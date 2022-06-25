@@ -89,7 +89,7 @@
             "decay1": 70,
             "decay2": 90,
             "image_size": 840,
-            "pretrain": true,
+            "pretrain": false,
             "return_layers": {
                 "layer2": 1,
                 "layer3": 2,
