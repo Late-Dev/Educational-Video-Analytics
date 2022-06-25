@@ -8,6 +8,11 @@ services:
       - 8000:8000
     environment:
       - MONGO_HOST=mongo
+    
+  frontend:
+    build: ./frontend
+    ports:
+      - 8080:8080
 
   cv-service:
     runtime: nvidia
@@ -50,6 +55,8 @@ services:
 
   createbuckets:
     image: minio/mc
+    environment:
+      - MINIO_API_CORS_ALLOW_ORIGIN=*
     depends_on:
       - minio
     entrypoint: >
