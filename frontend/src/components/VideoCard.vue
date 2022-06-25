@@ -49,7 +49,6 @@ const props = defineProps({
 })
 
 const videotime = computed(()=>{
-    console.log(props.video)
     const itemtime = props.video.lesson_start_time
     const dt = Date.parse(itemtime)
     const fulldate = new Date(dt)

@@ -80,7 +80,6 @@ const lessons = ref([
 
 
 function openVideo(video){
-    console.log(video)
     mainStore.changePage('videoanalytics')
     mainStore.video = video
 }
