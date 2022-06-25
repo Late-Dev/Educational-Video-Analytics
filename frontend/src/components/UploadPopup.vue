@@ -6,25 +6,25 @@
                 <img src="@/assets/close.svg" alt="">
             </div>
             <div>
-                <DragNDrop></DragNDrop>
+                <DragNDrop @upload="videoUpload"></DragNDrop>
             </div>
             <div class="upload-popup__row">
                 <div class="upload-popup__class">
-                    <BaseInput label="Класс"/>
+                    <BaseInput @update:model-value="(data)=>{payload.school_class = data}" label="Класс"/>
                 </div>
                 <div class="upload-popup__time">
-                    <BaseSelect label="Время начала" :options="lessons" />
+                    <BaseSelect @input="handleData" label="Время начала" :options="lessons" />
                 </div>
                 
             </div>
             <div class="upload-popup__row">
-                <BaseInput label="Предмет"/>
+                <BaseInput @update:model-value="(data)=>{payload.subject = data}" label="Предмет"/>
             </div>
             <div class="upload-popup__row">
-                <BaseInput label="Преподаватель"/>
+                <BaseInput @update:model-value="(data)=>{payload.teacher = data}" label="Преподаватель"/>
             </div>
             <div class="upload-popup__row">
-                <BaseButton type="secondary" class="upload-popup__button">загрузить</BaseButton>
+                <BaseButton @click="submitVideo" type="secondary" class="upload-popup__button">загрузить</BaseButton>
             </div>
         </div>
     </div>
@@ -39,6 +39,27 @@ import BaseSelect from "./BaseSelect.vue";
 import { useMainStore } from "@/store/index";
 import { onMounted, onUnmounted, ref } from "vue";
 
+import { addVideo, Video} from '@/api/index'
+
+
+const payload = ref({
+    url: '',
+    school_class: '',
+    teacher: '',
+    subject: '',
+    lesson_start_time: new Date
+} as Video)
+
+
+function handleData(data: String){
+    const time = new Date()
+    const hours = data.split(':')[0]
+    const minutes = data.split(':')[1]
+    time.setHours(parseInt(hours))
+    time.setMinutes(parseInt(minutes))
+    payload.value.lesson_start_time = time
+}
+
 onMounted(()=>{
     window.addEventListener('keyup', escCloseModal)
 })
@@ -47,10 +68,14 @@ onUnmounted(()=>{
     window.removeEventListener('keyup',escCloseModal)
 })
 
-function escCloseModal(e :any) {
+function escCloseModal(e: any) {
      if(e.keyCode === 27) {
          mainStore.closePopup()
     }
+}
+
+function submitVideo(){
+    addVideo(payload.value)
 }
 
 const lessons = ref([
@@ -64,6 +89,11 @@ const lessons = ref([
     ])
 
 const mainStore = useMainStore();
+
+function videoUpload(url: String){
+    payload.value.url = url
+}
+
 
 </script>
 

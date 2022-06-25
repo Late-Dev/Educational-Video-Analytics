@@ -18,13 +18,17 @@
 <script setup>
 import axios from 'axios';
 import DropZone from 'dropzone-vue';
-import { ref } from 'vue';
+import { ref, defineEmits } from 'vue';
+
+
+const emits = defineEmits(['upload'])
 
 async function upload(file, name){
     loading.value = true
     await axios.put('http://localhost:9000/videos/'+name+file.name, file).then((resp)=>{
         console.log(resp.config.url)
         loading.value = false
+        emits('upload', resp.config.url)
     })
 }
 

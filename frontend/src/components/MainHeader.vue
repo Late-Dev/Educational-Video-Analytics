@@ -19,12 +19,12 @@
 
 <script setup lang="ts">
 import { useMainStore } from "@/store/index";
-import axios from "axios";
+import { isAlive } from "@/api/index";
 import { onMounted } from "vue";
 import BaseButton from "./BaseButton.vue";
 
 onMounted(async()=>{
-    const res = await axios.get('http://localhost:8000')
+    const res = await isAlive()
     console.log(res.data)
 })
 

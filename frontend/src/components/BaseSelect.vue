@@ -21,7 +21,9 @@
 </template>
 
 <script setup >
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
+
+const emits = defineEmits('input')
 
 defineProps({
     label:{
@@ -50,6 +52,7 @@ function handleFocusOut(){
 function handleChoose(opt){
     selectedValue.value = opt.value
     opened.value = false
+    emits('input', selectedValue.value)
 }
 
 </script>

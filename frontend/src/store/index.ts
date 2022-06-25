@@ -5,6 +5,7 @@ export type RootState = {
     popupOpened: boolean
 }
 
+
 export const useMainStore = defineStore({
     id: "mainStore",
     state: ()=>({
