@@ -17,7 +17,7 @@ def main(sleep_range: float):
         task = find_task({"status": StatusEnum.uploaded})
         if task:
             print(task)
-            file_url = 'http://minio:9000/'+task['url']
+            file_url = 'http://minio:9000/videos/'+task['url']
             try:
                 file_path = download_file(file_url)
                 update_task(task, {"status": StatusEnum.processing})
