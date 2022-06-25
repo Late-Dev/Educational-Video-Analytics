@@ -1,5 +1,7 @@
 # frontend
 
+Использован фреймворк vue
+
 ## Project setup
 ```
 yarn install
