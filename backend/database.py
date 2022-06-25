@@ -1,6 +1,7 @@
 import os
 from enum import Enum
 import motor.motor_asyncio
+from bson.objectid import ObjectId
 
 mongo_host = os.environ["MONGO_HOST"]
 MONGO_DETAILS = f"mongodb://admin:admin@{mongo_host}:27017"
@@ -28,5 +29,14 @@ async def get_video_list_data():
     videos = []
     async for video in lesson_videos_collection.find():
         video['_id'] = str(video['_id'])
+        del video['bar_data']
+        del video['line_data']
         videos.append(video)
     return videos
+
+
+async def get_video_card_data(_id):
+    card = await lesson_videos_collection.find_one({'_id': ObjectId(_id)})
+    if card is not None:
+        card['_id'] = str(card['_id'])
+    return card

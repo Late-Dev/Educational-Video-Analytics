@@ -2,6 +2,15 @@
     <div class="video-card" >
         <div class="video-card__preview">
             <video :src="video.url" s></video>
+            <div class="video-card__status">
+                <div class="video-card__status-test" 
+                :class="{
+                    'video-card__status-test--uploaded': video.status==='uploaded' ||video.status==='processing' ,
+                    'video-card__status-test--success': video.status==='success',
+                    'video-card__status-test--error': video.status==='error',
+
+                    }">{{video.status}}</div>
+            </div>
         </div>
         <div class="video-card__date">{{ videotime}}</div>
         <div class="video-card__desc">
@@ -70,6 +79,38 @@ const videotime = computed(()=>{
     box-shadow: 0px 8px 16px rgba(17, 17, 17, 0.06);
     border-radius: 12px;
     cursor: pointer;
+
+    &__status{
+        height: 0px;
+        position: relative;
+        top: -50px;
+        display: flex;
+        justify-content: flex-end;
+        &-test{
+            height: 50px;
+            position: relative;
+            display: flex;
+            border-radius: 12px 0px;
+            padding: 10px 20px;
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 28px;
+            letter-spacing: 0.75px;
+            &--uploaded{
+                color: #F4B740;
+                background: #FFF4DF;
+            }
+            &--success{
+                color: #00BA88;
+                background: #DFFFF6;
+            }
+            &--error{
+                color: #ED2E7E;
+                background: #FFDFED;
+            }
+
+        }
+    }
 
     &__preview{
         width: 100%;

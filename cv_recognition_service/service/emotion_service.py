@@ -114,4 +114,5 @@ class EmotionService(BaseService):
         frame_data = self._serialize_frame_data(tracked_boxes, classes_data)
         frame_data = self._update_frame_data(frame_data, frames_to_analize)
         plotted_frame = self._draw_predictions(frame, frame_data)
-        return plotted_frame
+
+        return plotted_frame, frame_data

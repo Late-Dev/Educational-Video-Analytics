@@ -8,7 +8,7 @@ services:
       - 8000:8000
     environment:
       - MONGO_HOST=mongo
-    
+
   frontend:
     build: ./frontend
     ports:
@@ -60,16 +60,7 @@ services:
     depends_on:
       - minio
     entrypoint: >
-      /bin/sh -c "
-      /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin;
-      /usr/bin/mc mb myminio/videos;
-      /usr/bin/mc policy set public myminio/videos;
-      /usr/bin/mc mb myminio/processed-videos;
-      /usr/bin/mc policy set public myminio/processed-videos;
-      /usr/bin/mc mb myminio/preview-images;
-      /usr/bin/mc policy set public myminio/preview-images;
-      exit 0;
-      "
+      /bin/sh -c " /usr/bin/mc config host add myminio http://minio:9000 minioadmin minioadmin; /usr/bin/mc mb myminio/videos; /usr/bin/mc policy set public myminio/videos; /usr/bin/mc mb myminio/processed-videos; /usr/bin/mc policy set public myminio/processed-videos; /usr/bin/mc mb myminio/preview-images; /usr/bin/mc policy set public myminio/preview-images; exit 0; "
 
 volumes:
   minio-storage:

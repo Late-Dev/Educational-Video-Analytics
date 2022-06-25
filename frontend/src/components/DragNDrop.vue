@@ -23,11 +23,16 @@ import { ref, defineEmits } from 'vue';
 
 const emits = defineEmits(['upload'])
 
+
+// const BUCKET_UPLOAD_NAME = 'http://localhost:9000/videos/'
+const BUCKET_UPLOAD_NAME = process.env.VUE_APP_BUCKET_UPLOAD_NAME
+
 async function upload(file, name){
     loading.value = true
-    await axios.put('http://localhost:9000/videos/'+name+file.name, file).then((resp)=>{
+    await axios.put(BUCKET_UPLOAD_NAME+name+file.name, file).then(()=>{
         loading.value = false
-        emits('upload', resp.config.url)
+        // emits('upload', resp.config.url) //TODO сюда возвращаю name+file.name
+        emits('upload', name+file.name)
     })
 }
 
