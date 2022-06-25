@@ -27,3 +27,7 @@ class BaseConnector(ABC):
     @abstractmethod
     def get_collection(self):
         pass
+
+    @abstractmethod
+    def find(self):
+        pass
