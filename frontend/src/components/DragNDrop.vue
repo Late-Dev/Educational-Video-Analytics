@@ -25,7 +25,7 @@ const emits = defineEmits(['upload'])
 
 
 // const BUCKET_UPLOAD_NAME = 'http://localhost:9000/videos/'
-const BUCKET_UPLOAD_NAME = process.env.BUCKET_UPLOAD_NAME
+const BUCKET_UPLOAD_NAME = process.env.VUE_APP_BUCKET_UPLOAD_NAME
 
 async function upload(file, name){
     loading.value = true

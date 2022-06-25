@@ -14,9 +14,9 @@ services:
     ports:
       - 8080:8080
     environment:
-      - BUCKET_UPLOAD_NAME=http://localhost:9000/videos/
-      - BUCKET_DOWNLOAD_NAME=http://localhost:9000/processed-videos/
-      - API_URL=http://localhost:8000
+      - VUE_APP_BUCKET_UPLOAD_NAME=http://localhost:9000/videos/
+      - VUE_APP_BUCKET_DOWNLOAD_NAME=http://localhost:9000/processed-videos/
+      - VUE_APP_API_URL=http://localhost:8000
 
   # cv-service:
   #   runtime: nvidia
