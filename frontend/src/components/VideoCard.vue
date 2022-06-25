@@ -1,7 +1,7 @@
 <template>
     <div class="video-card">
         <div class="video-card__preview"></div>
-        <div class="video-card__date">{{ video.lesson_start_time}}</div>
+        <div class="video-card__date">{{ videotime}}</div>
         <div class="video-card__desc">
             <div class="video-card__subtitle">Предмет</div>
             <div class="video-card__item">{{video.subject}}</div>
@@ -18,6 +18,7 @@
 </template>
 
 <script setup>
+import { computed } from '@vue/reactivity';
 import { defineProps } from 'vue';
 
 // defineProps({
@@ -38,10 +39,18 @@ import { defineProps } from 'vue';
 //     }
 // })
 
-defineProps({
+const props = defineProps({
     video: {
         type: Object
     }
+})
+
+const videotime = computed(()=>{
+    const itemtime = props.video.lesson_start_time
+    const dt = Date.parse(itemtime)
+    const fulldate = new Date(dt)
+    const day = fulldate.toLocaleDateString()
+    return  fulldate.getHours() + ':' + fulldate.getMinutes() + ', '+ day
 })
 
 
@@ -78,8 +87,9 @@ defineProps({
         line-height: 28px;
         letter-spacing: 0.75px;
         color: #A0A3BD;
-
-
+    }
+    &__desc{
+        margin-top: 10px;
     }
 }
 

@@ -72,7 +72,6 @@ const lessons = ref([
 onMounted(async ()=>{
     const resp = await getVideoList()
     videos.value = resp.data
-    console.log(resp.data)
 })
 
 
