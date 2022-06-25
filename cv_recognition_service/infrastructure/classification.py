@@ -1,3 +1,5 @@
+from typing import List
+
 import numpy as np
 import cv2
 import torch
@@ -20,21 +22,19 @@ class DummyClassifier(ClassificationModel):
             return ("happy", "0", 0.98)
         return empty
     
-    def _image_preprocessing(self, image: np.ndarray) -> np.ndarray:
+    def _batch_image_preprocessing(self, image: np.ndarray) -> np.ndarray:
         return cv2.resize(image, (224, 224))
 
 
     def predict(self, image: np.ndarray):
-        preprocessed_image = self._image_preprocessing(image)
+        preprocessed_image = self._batch_image_preprocessing(image)
         raw_predictions = self.model(preprocessed_image)
         predicted_cls, cls_id, conf = raw_predictions[0], raw_predictions[1], raw_predictions[2]
         
-        if conf > self.conf_thresh:
-            predictions = ClassificationData(predicted_cls, cls_id, conf)
-            return predictions
-        else:
-            return None
-
+        face_emotions = [Emotion(predicted_cls, cls_id, conf)]
+        predictions = ClassificationData(face_emotions)
+        return predictions
+        
 
 class DanClassifier(ClassificationModel):
 
@@ -52,13 +52,13 @@ class DanClassifier(ClassificationModel):
             ]
         )
         self._labels = (
-            "спокойствие",
-            "радость",
-            "грусть",
-            "удивление",
-            "страх",
-            "отвращение",
-            "гнев",
+            "neutral",
+            "happy",
+            "sad",
+            "surprise",
+            "fear",
+            "disgust",
+            "anger",
         )
 
 
@@ -70,17 +70,7 @@ class DanClassifier(ClassificationModel):
         model.eval()
         return model
 
-    
-    def _image_preprocessing(self, images_batch: np.ndarray) -> np.ndarray:
-        result_batch = torch.zeros(len(images_batch), 3, *self._image_size)
-        for i, image in enumerate(images_batch):
-            image = self._data_transforms(Image.fromarray(image))
-            image = image.view(3, *self._image_size)
-            result_batch[i] = image
-        result_batch = result_batch.to(self.device)
-        return result_batch
-
-    def _one_image_preprocess(self, image: np.ndarray):
+    def _image_preprocessing(self, image: np.ndarray):
         image = self._data_transforms(Image.fromarray(image))
         image = image.view(1, 3, *self._image_size)
         image = image.to(self.device)
@@ -88,36 +78,15 @@ class DanClassifier(ClassificationModel):
 
 
     def predict(self, image: np.ndarray) -> ClassificationData:
-        preprocessed_image = self._one_image_preprocess(image)
+        preprocessed_image = self._image_preprocessing(image)
         with torch.no_grad():
             out, _, _ = self._model(preprocessed_image)
             probas = F.softmax(out, dim=1)
-        pred = [Emotion(
+        predicted_emotions = [Emotion(
                     class_name=self._labels[i],
                     class_id=i,
                     score=proba.item()
                 )
                 for i, proba in enumerate(probas[0])]
-        cls_data = ClassificationData(pred)
+        cls_data = ClassificationData(predicted_emotions)
         return cls_data
-
-    def predict_batch(self, images_batch: np.ndarray):
-        preprocessed_image = self._image_preprocessing(images_batch)
-
-        with torch.no_grad():
-            out, _, _ = self._model(preprocessed_image)
-            probas_batch = F.softmax(out, dim=1)
-
-        predictions = [
-            [
-                Emotion(
-                    class_name=self._labels[i],
-                    class_id=i,
-                    score=proba.item()
-                )
-                for i, proba in enumerate(probas)
-            ]
-            for probas in probas_batch
-        ]
-        return predictions
-        

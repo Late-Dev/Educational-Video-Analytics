@@ -1,12 +1,12 @@
 import numpy as np
 
-from cv_recognition_service.infrastructure.interface import Coords
-from cv_recognition_service.infrastructure.tracking.deep_sort.nn_matching import (
+from infrastructure.interface import Coords
+from infrastructure.tracking.deep_sort.nn_matching import (
     NearestNeighborDistanceMetric,
 )
-from cv_recognition_service.infrastructure.tracking.deep_sort.detection import Detection
-from cv_recognition_service.infrastructure.tracking.deep_sort.tracker import Tracker
-from cv_recognition_service.infrastructure.tracking.deep_sort import (
+from infrastructure.tracking.deep_sort.detection import Detection
+from infrastructure.tracking.deep_sort.tracker import Tracker
+from infrastructure.tracking.deep_sort import (
     generate_detections as gdet,
 )
 
