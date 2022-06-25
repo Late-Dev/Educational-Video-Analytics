@@ -24,7 +24,7 @@
                 <BaseInput label="Преподаватель"/>
             </div>
             <div class="upload-popup__row">
-                <BaseButton>загрузить</BaseButton>
+                <BaseButton type="secondary" class="upload-popup__button">загрузить</BaseButton>
             </div>
         </div>
     </div>
@@ -105,6 +105,10 @@ const mainStore = useMainStore();
         right:-60px;
         float: right;
         cursor: pointer;
+    }
+    &__button{
+        margin: auto;
+        width: 258px;
     }
 }
 

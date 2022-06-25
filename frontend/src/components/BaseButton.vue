@@ -1,16 +1,27 @@
 <template>
-    <button class="base-button" :class="'base-button--'+type">
+    <button class="base-button" :class="applyClasses">
         <slot></slot>
     </button>
 </template>
 
 <script setup>
-import {defineProps} from 'vue'
+import { defineProps, computed } from 'vue'
 
-defineProps({
+
+const applyClasses = computed(()=>{
+    const typeClass = 'base-button--' + props.type
+    const sizeClass = 'base-button--' + props.size
+    return [typeClass, sizeClass]
+})
+
+const props = defineProps({
     type: {
         type:String,
         default: 'primary'
+    },
+    size: {
+        type:String,
+        default: 'medium'
     }
 })
 </script>
@@ -33,6 +44,7 @@ defineProps({
     font-size: 16px;
     line-height: 28px;
     cursor: pointer;
+    // types
     &--primary{
         border: 2px solid $color-primary;
         background-color: white;
@@ -42,6 +54,27 @@ defineProps({
             color: $color-primary-dark
         }
     }
+    &--secondary{
+        border: 2px solid $color-primary;
+        background-color: $color-primary;
+        color: white;
+        &:hover{
+            border: 2px solid $color-primary-dark;
+            background-color: $color-primary-dark;
+        }
+    }
+
+    //sizes
+    &--small{
+        height: 40px;
+    }
+    &--medium{
+        height: 56px;
+    }
+    &--large{
+        height: 64px;
+    }
+    
 }
 
 </style>

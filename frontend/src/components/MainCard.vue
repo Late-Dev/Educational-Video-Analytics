@@ -10,7 +10,7 @@
             <span>{{data.description}}</span>
         </div>
         <div class="main-card__button">
-            <BaseButton>{{data.cta}}</BaseButton>
+            <BaseButton type="primary" size="large">{{data.cta}}</BaseButton>
         </div>
     </div>
 </template>

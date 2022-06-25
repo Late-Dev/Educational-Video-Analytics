@@ -8,7 +8,9 @@
                 <ul>
                     <li :class="{'header__navigation--active': mainStore.page==='analytics'}" @click="mainStore.changePage('analytics')">Аналитика</li>
                     <li :class="{'header__navigation--active': mainStore.page==='gallery'}" @click="mainStore.changePage('gallery')">Видеогалерея</li>
-                    <li >Добавить видео</li>
+                    <li >
+                        <BaseButton  @click="mainStore.openPopup" type="secondary">Добавить видео</BaseButton>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -19,6 +21,7 @@
 import { useMainStore } from "@/store/index";
 import axios from "axios";
 import { onMounted } from "vue";
+import BaseButton from "./BaseButton.vue";
 
 onMounted(async()=>{
     const res = await axios.get('http://localhost:8000')
@@ -35,6 +38,7 @@ const mainStore = useMainStore();
 .header{
     padding: 34px 0;
     display: flex;
+    align-items: center;
     &__logo{
         img{
             padding: 5px 0;
@@ -49,6 +53,7 @@ const mainStore = useMainStore();
             margin: 0;
             display: flex;
             gap: 74px;
+            align-items: center;
             li{
                 list-style-type: none;
                 color: $color-primary;
