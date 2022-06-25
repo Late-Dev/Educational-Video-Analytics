@@ -1,9 +1,14 @@
 from abc import abstractmethod, ABC
 from typing import List, Tuple
 from dataclasses import dataclass
+from collections import Counter
 
 import numpy as np
 import cv2
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 
 from infrastructure.interface import DetectionModel, DetectionData
 from infrastructure.interface import ClassificationModel, ClassificationData
@@ -42,10 +47,28 @@ class BaseService(ABC):
         color = (0, 255, 0)
         
         detections = frame_data.faces_detections
-        # classes_data = frame_data.classes_data
+        
         for coords in detections:
             cv2.rectangle(frame, (coords.x_min, coords.y_min), (coords.x_min+coords.width, coords.y_min+coords.height), color, thickness)
-        return frame
+
+        emotion_average = dict()
+        classes_data = frame_data.classes_data
+        for data in classes_data:
+            for emotion in data.emotions:
+                emotion_average.setdefault(emotion.class_name, 0) 
+                emotion_average[emotion.class_name] += emotion.score / len(classes_data)
+        names = list(sorted(emotion_average.keys()))
+        values = [emotion_average[i] for i in names]
+        
+        matplotlib.rcParams.update({'font.size': 27})
+        fig = Figure(figsize=(frame.shape[0] / 100, frame.shape[0] / 100), dpi=100)
+        canvas = FigureCanvas(fig)
+        ax = fig.gca()
+        ax.barh(names, values)
+        canvas.draw()       # draw the canvas, cache the renderer
+        bar_image = np.frombuffer(canvas.tostring_rgb(), dtype='uint8').reshape((frame.shape[0], frame.shape[0], 3))
+
+        return np.hstack([frame, bar_image])
 
     @staticmethod
     def _serialize_frame_data(detections_data: DetectionData, classes_data: ClassificationData):
