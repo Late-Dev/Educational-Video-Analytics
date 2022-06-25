@@ -21,12 +21,12 @@ def upload_preview_handler(filepath: str, task: dict):
 
 def process_video_handler(filepath: str, task: dict):
     # start video processing
-    output_filepath = process_video(filepath)
+    output_filepath, bar_data, line_data = process_video(filepath)
     # upload processed file to bucket
     url = "http://minio:9000/processed-videos/"
     filename = os.path.basename(output_filepath)
     res = upload_file(output_filepath, url)
     if res:
-        update_task(task, {"status": StatusEnum.ready, "output-file-url": f"{url}{filename}"})
+        update_task(task, {"status": StatusEnum.ready, "bar_data": bar_data, "line_data": line_data})
     else:
         update_task(task, {"status": StatusEnum.error})

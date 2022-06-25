@@ -117,7 +117,7 @@ const lessons = ref([
 const mainStore = useMainStore();
 
 function videoUpload(url: String){
-    payload.value.url = url
+    payload.value.url = url.replaceAll(' ', '_')
 }
 
 
