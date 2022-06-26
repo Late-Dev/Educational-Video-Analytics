@@ -5,7 +5,7 @@
         <MainCard @click="mainStore.changePage('gallery')" :data="cards.gallery" />
     </div>
     <div class="analytics" v-if="mainStore.page==='analytics'">
-        аналитика
+        <AllAnalyticsPage />
     </div>
     <div class="gallery" v-if="mainStore.page==='gallery'">
         <GalleryPage></GalleryPage>
@@ -29,6 +29,7 @@ import upload from "@/assets/upload.svg"
 import gallery from "@/assets/gallery.svg"
 import GalleryPage from "./GalleryPage.vue";
 import VideoAnalyticsPage from "./VideoAnalyticsPage.vue";
+import AllAnalyticsPage from "./AllAnalyticsPage.vue";
 
 const mainStore = useMainStore();
 
