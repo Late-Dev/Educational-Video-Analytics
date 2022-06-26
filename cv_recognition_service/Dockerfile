@@ -10,7 +10,7 @@ RUN pip install -U pip && \
     pip install -r requirements.txt --no-cache-dir
 
 RUN apt-get install unzip && \
-    gdown --id 1dv-AnbAEbdtR_ZrmmS0qoV_YBFD7tSZV -O ./ && \
+    gdown --id 1OJro7M0eqzhLkw4K6DmFbI5SRZbMTE2B -O ./ && \
     unzip models.zip && \
     rm -f models.zip*
 

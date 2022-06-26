@@ -8,3 +8,5 @@ scikit-image
 pymongo==4.1.1
 tensorflow-gpu==2.9.1
 gdown==4.5.0
+av
+pandas

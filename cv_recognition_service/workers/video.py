@@ -2,9 +2,12 @@ import os
 from typing import List
 from random import shuffle
 
+import av
 import cv2
 import numpy as np
 from tqdm import trange
+import torch
+import torchvision
 
 from service.interface import BaseService
 from building import build_emotion_service
@@ -31,9 +34,9 @@ def process_video(video_path: str):
     height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     fps = 10
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    #fourcc = cv2.VideoWriter_fourcc(*'h264')
     out_path = f'output/{os.path.basename(video_path)}'
-    writer = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
+    #writer = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
 
     emotion_average = dict()
 
@@ -41,27 +44,56 @@ def process_video(video_path: str):
     shuffle(names)
     line_data = {}
     
-    for _ in trange(length):
-        ret, frame = capture.read()
-        if frame is None:
-            break
-        new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        plotted_frame, frame_data = service.process_frame(new_frame, frames_to_analize=15)
-        writer.write(cv2.cvtColor(plotted_frame, cv2.COLOR_RGB2BGR))
+    #videoframes = []
+    video_codec = "libx264"
+    options= None
+    audio_array = None
+    audio_fps = None
+    audio_codec= None
+    audio_options = None
 
-        detections = frame_data.faces_detections
-        face_emotions = frame_data.predicted_emotions
-        
-        for data in face_emotions:
-            for emotion in data.emotions:
-                emotion_average.setdefault(emotion.class_name, []) 
-                emotion_average[emotion.class_name].append(emotion.score)
+    with av.open(out_path, mode="w") as container:
+        stream = container.add_stream(video_codec, rate=fps)
+        stream.width = width
+        stream.height = height
+        stream.pix_fmt = "yuv420p" if video_codec != "libx264rgb" else "rgb24"
+        stream.options = options or {}
 
-        for coords, emotions in zip(detections, face_emotions):
+        length = 1000
+        for i in trange(length):
+            ret, frame = capture.read()
+            if frame is None:
+                break
+            if i % 10 == 0:
+                continue
+            new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            plotted_frame, frame_data = service.process_frame(new_frame, frames_to_analize=15)
+            #writer.write(cv2.cvtColor(plotted_frame, cv2.COLOR_RGB2BGR))
+            #videoframes.append(plotted_frame)
 
-            for emotion in data.emotions:
-                emotion_average.setdefault(emotion.class_name, 0) 
-                line_data.setdefault(names[coords.tracking_id], {}).setdefault(emotion.class_name, []).append(emotion.score)
+            detections = frame_data.faces_detections
+            face_emotions = frame_data.predicted_emotions
+            
+            for data in face_emotions:
+                for emotion in data.emotions:
+                    emotion_average.setdefault(emotion.class_name, []) 
+                    emotion_average[emotion.class_name].append(emotion.score)
+
+            for coords, emotions in zip(detections, face_emotions):
+
+                for emotion in data.emotions:
+                    emotion_average.setdefault(emotion.class_name, 0) 
+                    line_data.setdefault(names[coords.tracking_id], {}).setdefault(emotion.class_name, []).append(emotion.score)
+
+
+            frame = av.VideoFrame.from_ndarray(plotted_frame, format="rgb24")
+            frame.pict_type = "NONE"
+            for packet in stream.encode(frame):
+                container.mux(packet)
+
+        # Flush stream
+        for packet in stream.encode():
+            container.mux(packet)
 
 
     names = list(sorted(emotion_average.keys()))
@@ -80,7 +112,8 @@ def process_video(video_path: str):
                 all_students[emotion][i] += value / len(line_data)
 
     line_data['Весь класс'] = all_students
-    writer.release() 
+    #writer.release() 
+    #torchvision.io.write_video(out_path, torch.from_numpy(np.array(videoframes)), fps=5)
     capture.release()
     return out_path, bar_data, line_data
 

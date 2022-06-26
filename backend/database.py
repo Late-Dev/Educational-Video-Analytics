@@ -48,12 +48,20 @@ def mean(x):
     return sum(x) / len(x)
 
 async def get_analytics_data(filter_type: str=None, filter_value: str=None, group:str=None):
+    if filter_type == '':
+        filter_type = None
+    if filter_value == '':
+        filter_value = None
+    if group == '':
+        group = None
     names = [ "гнев", "грусть", "отвращение", "радость", "спокойствие", "страх", "удивление" ]
     if filter_type is None and group is None:
         values = [0 for _ in names]
 
         count = 0
         async for video in lesson_videos_collection.find():
+            if video['status'] != StatusEnum.ready:
+                continue
             for i, value in enumerate(video['bar_data']['values']):
                 values[i] += value
             count += 1
@@ -69,10 +77,15 @@ async def get_analytics_data(filter_type: str=None, filter_value: str=None, grou
 
     elif filter_type is not None and filter_type != 'student' and group is None:
         card = await lesson_videos_collection.find_one({filter_type: filter_value})
-        result = [card['bar_data']]
+        if card['status'] != StatusEnum.ready:
+            result = []
+        else:
+            result = [card['bar_data']]
     elif filter_type is not None and filter_type == 'student' and group is None:
         result = []
         async for video in lesson_videos_collection.find():
+            if video['status'] != StatusEnum.ready:
+                continue
             if filter_value in video['line_data']:
                 values = [mean(video['line_data'][filter_value][i]) for i in names]
                 result = [{
@@ -88,6 +101,8 @@ async def get_analytics_data(filter_type: str=None, filter_value: str=None, grou
         used = set()
         result = []
         async for video in lesson_videos_collection.find():
+            if video['status'] != StatusEnum.ready:
+                continue
             if video[group] not in used:
                 used.add(video[group])
             bar = video['bar_data']
@@ -98,6 +113,8 @@ async def get_analytics_data(filter_type: str=None, filter_value: str=None, grou
         used = set()
         result = []
         async for video in lesson_videos_collection.find():
+            if video['status'] != StatusEnum.ready:
+                continue
             for student in video['line_data']:
                 if student not in used and student != "Весь класс":
                     used.add(student)
@@ -110,9 +127,12 @@ async def get_analytics_data(filter_type: str=None, filter_value: str=None, grou
                     result.append(bar)
     elif filter_type is not None and filter_type != 'student' and group is not None and group != 'student':
         card = await lesson_videos_collection.find_one({filter_type: filter_value})
-        bar = card['bar_data']
-        bar['title'] = card[group]
-        result = [bar]
+        if card['status'] != StatusEnum.ready:
+            result = []
+        else:
+            bar = card['bar_data']
+            bar['title'] = card[group]
+            result = [bar]
     elif filter_type is not None and filter_type != 'student' and group is not None and group == 'student':
         video = await lesson_videos_collection.find_one({filter_type: filter_value})
         result = []
@@ -130,6 +150,8 @@ async def get_analytics_data(filter_type: str=None, filter_value: str=None, grou
         used = set()
         result = []
         async for video in lesson_videos_collection.find():
+            if video['status'] != StatusEnum.ready:
+                continue
             if student in video['line_data'] and video[group] not in used:
                 used.add(video[group])
                 values = [mean(video['line_data'][student][i]) for i in names]
