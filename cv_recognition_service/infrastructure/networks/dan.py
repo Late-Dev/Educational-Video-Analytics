@@ -6,16 +6,31 @@ from torchvision import models
 
 
 class DAN(nn.Module):
-    def __init__(self, num_class=7, num_head=4, pretrained=True):
+    def __init__(
+        self,
+        num_class=7,
+        num_head=4,
+        backbone=models.resnet18(pretrained=False),
+        conv_size=None,
+    ):
         super(DAN, self).__init__()
 
-        resnet = models.resnet18(pretrained)
+        # backbone = models.resnet18(pretrained)
+        # backbone = models.efficientnet_b3(pretrained=True)
 
-        if pretrained:
-            checkpoint = torch.load("./models/resnet18_msceleb.pth")
-            resnet.load_state_dict(checkpoint["state_dict"], strict=True)
+        # if pretrained:
+        #     checkpoint = torch.load("./models/resnet18_msceleb.pth")
+        #     resnet.load_state_dict(checkpoint["state_dict"], strict=True)
 
-        self.features = nn.Sequential(*list(resnet.children())[:-2])
+        if conv_size:
+            self.features = nn.Sequential(
+                *list(backbone.children())[:-2]
+                + [nn.Conv2d(conv_size, 512, kernel_size=1)]
+            )
+        else:
+            self.features = nn.Sequential(*list(backbone.children())[:-2])
+
+        # print(self.features)
         self.num_head = num_head
         for i in range(num_head):
             setattr(self, "cat_head%d" % i, CrossAttentionHead())

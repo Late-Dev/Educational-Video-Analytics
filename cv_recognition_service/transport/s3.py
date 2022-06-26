@@ -23,8 +23,11 @@ def upload_file(file_path: str, url: str):
     """
     Put files on bucket
     """
+    print(file_path)
     file_bytes = read_file_as_bytes(file_path)
+    print(len(file_bytes))
     r = requests.put(f"{url}{file_path.split('/')[-1]}", data=file_bytes)
+    print(r.text)
     if r.ok:
         return True
     else:

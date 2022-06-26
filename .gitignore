@@ -9,3 +9,5 @@ venv
 .vscode/
 models/
 *.jpg
+*.csv
+*.json
