@@ -5,6 +5,8 @@ from random import shuffle
 import cv2
 import numpy as np
 from tqdm import trange
+import torch
+import torchvision
 
 from service.interface import BaseService
 from building import build_emotion_service
@@ -31,9 +33,9 @@ def process_video(video_path: str):
     height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     fps = 10
-    fourcc = cv2.VideoWriter_fourcc(*'h264')
+    #fourcc = cv2.VideoWriter_fourcc(*'h264')
     out_path = f'output/{os.path.basename(video_path)}'
-    writer = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
+    #writer = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
 
     emotion_average = dict()
 
@@ -41,13 +43,15 @@ def process_video(video_path: str):
     shuffle(names)
     line_data = {}
     
+    videoframes = []
     for _ in trange(length):
         ret, frame = capture.read()
         if frame is None:
             break
         new_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         plotted_frame, frame_data = service.process_frame(new_frame, frames_to_analize=15)
-        writer.write(cv2.cvtColor(plotted_frame, cv2.COLOR_RGB2BGR))
+        #writer.write(cv2.cvtColor(plotted_frame, cv2.COLOR_RGB2BGR))
+        videoframes.append(plotted_frame)
 
         detections = frame_data.faces_detections
         face_emotions = frame_data.predicted_emotions
@@ -80,7 +84,8 @@ def process_video(video_path: str):
                 all_students[emotion][i] += value / len(line_data)
 
     line_data['Весь класс'] = all_students
-    writer.release() 
+    #writer.release() 
+    torchvision.io.write_video(out_path, torch.from_numpy(np.array(videoframes)))
     capture.release()
     return out_path, bar_data, line_data
 
