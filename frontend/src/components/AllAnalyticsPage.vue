@@ -6,6 +6,7 @@
             <template #header>
                 Фильтр
             </template>
+            <BaseSelect label="Аналитика"></BaseSelect>
         </EmptyCard>
     </div>
 
@@ -14,6 +15,13 @@
 
 import BaseHeader from './BaseHeader.vue';
 import EmptyCard from './EmptyCard.vue';
+import BaseSelect from './BaseSelect.vue';
+import { onMounted } from 'vue';
+import { getAnalytics } from '@/api/index'
+
+onMounted(async ()=>{
+    getAnalytics()
+})
 
 
 </script>

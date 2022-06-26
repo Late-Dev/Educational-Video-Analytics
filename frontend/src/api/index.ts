@@ -28,3 +28,7 @@ export function getVideoList(){
 export function getVideoCard(_id: String){
     return axios.get('/get_video_card', { params: {_id}})
 }
+
+export function getAnalytics(filter_type?: String, filter_value?: String, group?: String){
+    return axios.get('/get_analytics', {params: {filter_type, filter_value, group}})
+}
