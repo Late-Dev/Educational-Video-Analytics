@@ -63,7 +63,8 @@ services:
   infer:
     runtime: nvidia
     build: ./cv_recognition_service
-    command: python3 infer.py -i /data/input-videos -o /data/output
+    entrypoint: python3 
+    command: infer.py -i /data/input-videos -o /data/output
     volumes:
       - $PWD/cv_recognition_service/:/cv_recognition_service
       - $PWD/data/:/data
