@@ -139,9 +139,7 @@ def main():
     detector = RetinaTorchDetector(
         model_path="infrastructure/retina_torch/config.json", conf_thresh=0.9
     )
-    classifier = DanClassifier(
-        model_path="models/emotion_rec/affecnet7_epoch6_acc0.6569.pth"
-    )
+    classifier = DanClassifier(model_path="models/affecnet7_epoch6_acc0.6569.pth")
     tracker = DeepsortTracker("models/mars-small128.pb")
 
     service = InferFilesService(detector, classifier, tracker)
