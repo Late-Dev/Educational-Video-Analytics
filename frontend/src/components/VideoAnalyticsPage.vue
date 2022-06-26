@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="analytics">
         <BaseHeader>Аналитика загруженного видео</BaseHeader>
         <EmptyCard>
             <video :src="mainStore.video.url" controls></video>
@@ -8,8 +8,17 @@
             </p>
             
         </EmptyCard>
-        <EmptyCard>
+        <EmptyCard class="analytics__card">
+          <template #header>
+                Состояние класса во время урока
+            </template>
           <BarChart v-bind="barChartProps"></BarChart>
+        </EmptyCard>
+        <EmptyCard class="analytics__card">
+          <template #header>
+                Состояние отдельного ученика за урок
+            </template>
+            <BaseSelect :options="lineOptions" label="Имя ученика"></BaseSelect>
         </EmptyCard>
     </div>
 </template>
@@ -23,6 +32,7 @@ import { ref, computed, onMounted} from 'vue'
 import { BarChart, useBarChart } from "vue-chart-3";
 import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
 import { getVideoCard } from '@/api/index'
+import BaseSelect from "./BaseSelect.vue";
 
 
 const mainStore = useMainStore();
@@ -42,6 +52,16 @@ Chart.register(...registerables);
 const dataValues = computed(()=>videoCard.value.bar_data?.values);
 
 const dataLabels = computed(()=>videoCard.value.bar_data?.names);
+
+const lineOptions = computed(()=>{
+  if(videoCard.value.line_data !== undefined){
+    console.log(videoCard.value.line_data)
+
+    const names = Object.keys(videoCard.value.line_data)
+    return names.map((item)=>({label:item, value: item,}))
+  } 
+  return [{label:'', value:''}]
+})
 
 const toggleLegend = ref(true); 
 // console.log(toggleLegend)
@@ -72,9 +92,6 @@ const options = computed<ChartOptions<"bar">>(() => ({
         },
       },
       plugins: {
-        legend: {
-          position: 'top'
-        },
       },
     }));
 
@@ -89,3 +106,12 @@ const { barChartProps } = useBarChart({
 
 
 </script>
+
+<style lang="scss" scoped>
+.analytics{
+  margin-bottom: 300px;
+  &__card{
+    margin-top: 40px;
+  }
+}
+</style>
