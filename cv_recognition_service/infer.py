@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List, Optional
 
 import cv2
+import pandas as pd
 import numpy as np
 from tqdm import tqdm
 from tqdm import trange
@@ -41,6 +42,15 @@ class InferFilesService(BaseService):
             "disgust",
             "anger",
         )
+        self.competition_labels_map = {
+            "anger": 0,
+            "disgust": 1,
+            "fear": 2,
+            "happy": 3,
+            "neutral": 6,
+            "sadness": 4,
+            "surprise": 5,
+        }
         self.id2label = {i: label for i, label in enumerate(self._labels)}
 
     def process_frame(self, frame: np.ndarray) -> FrameData:
@@ -77,7 +87,7 @@ class InferFilesService(BaseService):
         output_dir.mkdir(exist_ok=True)
 
         video_paths = list(input_dir.iterdir())
-        results = {}
+        results = {"filename": [], "emotion": []}
         print(video_paths)
         for video_path in tqdm(video_paths, leave=False):
             video_probas = np.array([0.0 for _ in range(7)])
@@ -88,7 +98,7 @@ class InferFilesService(BaseService):
             height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
             fps = 10
-            fourcc = cv2.VideoWriter_fourcc(*"h264")
+            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
             writer = cv2.VideoWriter(
                 str(output_dir / video_path.name), fourcc, fps, (width, height)
             )
@@ -108,11 +118,14 @@ class InferFilesService(BaseService):
             writer.release()
             capture.release()
 
-            emotion = self.id2label[video_probas.argmax()]
-            results[str(video_path)] = emotion
+            results["filename"] += [str(video_path.name)]
+            results["emotion"] += [
+                self.competition_labels_map[self.id2label[video_probas.argmax()]]
+            ]
 
-            with open(output_dir / "results.json", "w") as f:
-                json.dump(results, f)
+            pd.DataFrame(data=results, columns=["filename", "emotion"]).to_csv(
+                str(output_dir / "LateDev.csv"), index=False
+            )
 
 
 def setup_parser():
@@ -139,7 +152,7 @@ def main():
     detector = RetinaTorchDetector(
         model_path="infrastructure/retina_torch/config.json", conf_thresh=0.9
     )
-    classifier = DanClassifier(model_path="models/affecnet7_epoch6_acc0.6569.pth")
+    classifier = DanClassifier(model_path="models/affecnet_res18_finetune_fer_pseudo_young_acc0.7598.pth")
     tracker = DeepsortTracker("models/mars-small128.pb")
 
     service = InferFilesService(detector, classifier, tracker)
