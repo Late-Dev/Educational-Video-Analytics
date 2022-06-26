@@ -11,7 +11,18 @@
                 </div>
                 <div class="upload-popup__row">
                     <div class="upload-popup__class">
-                        <BaseInput @update:model-value="(data)=>{payload.school_class = data}" label="Класс"/>
+                        <BaseSelect @input="(item)=>{payload.school_class = item}" 
+                        :options="[
+                            {label: '1А', value: '1А'},
+                            {label: '1Б', value: '1Б'},
+                            {label: '1В', value: '1В'},
+                            {label: '2А', value: '2А'},
+                            {label: '3А', value: '3А'},
+                            {label: '6А', value: '6А'},
+                            {label: '7А', value: '7А'},
+                            {label: '8А', value: '8А'},
+                            ]"
+                         label="Класс"/>
                     </div>
                     <div class="upload-popup__time">
                         <BaseSelect @input="handleData" label="Время начала" :options="lessons" />
@@ -19,10 +30,24 @@
                     
                 </div>
                 <div class="upload-popup__row">
-                    <BaseInput @update:model-value="(data)=>{payload.subject = data}" label="Предмет"/>
+                    <BaseSelect 
+                    :options="[
+                            {label: 'Физика', value: 'Физика'},
+                            {label: 'Математика', value: 'Математика'},
+                            {label: 'Английский', value: 'Английский'},
+                            ]"
+                    
+                    
+                    @input="(data)=>{payload.subject = data}" label="Предмет"/>
                 </div>
                 <div class="upload-popup__row">
-                    <BaseInput @update:model-value="(data)=>{payload.teacher = data}" label="Преподаватель"/>
+                    <BaseSelect 
+                    :options="[
+                            {label: 'Анна Андреевна Рязанова', value: 'Анна Андреевна Рязанова'},
+                            {label: 'Альбина Николаевна Крупнина', value: 'Альбина Николаевна Крупнина'},
+                            {label: 'Галина Александровна Неуймина', value: 'Галина Александровна Неуймина'},
+                            ]"
+                    @input="(data)=>{payload.teacher = data}" label="Преподаватель"/>
                 </div>
                 <div class="upload-popup__row">
                     <BaseButton @click="submitVideo" :disabled="sending" type="secondary" class="upload-popup__button">Загрузить</BaseButton>
@@ -48,7 +73,6 @@
 
 <script setup lang="ts">
 import DragNDrop from "./DragNDrop.vue";
-import BaseInput from "./BaseInput.vue";
 import BaseButton from "./BaseButton.vue";
 import BaseSelect from "./BaseSelect.vue";
 
