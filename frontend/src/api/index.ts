@@ -32,3 +32,4 @@ export function getVideoCard(_id: String){
 export function getAnalytics(filter_type?: String, filter_value?: String, group?: String){
     return axios.get('/get_analytics', {params: {filter_type, filter_value, group}})
 }
+//teacher, subject, student
