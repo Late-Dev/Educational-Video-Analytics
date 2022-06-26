@@ -45,7 +45,6 @@ def process_video(video_path: str):
     line_data = {}
     
     #videoframes = []
-    #length = 5000
     video_codec = "libx264"
     options= None
     audio_array = None
@@ -60,7 +59,7 @@ def process_video(video_path: str):
         stream.pix_fmt = "yuv420p" if video_codec != "libx264rgb" else "rgb24"
         stream.options = options or {}
 
-
+        length = 1000
         for i in trange(length):
             ret, frame = capture.read()
             if frame is None:
