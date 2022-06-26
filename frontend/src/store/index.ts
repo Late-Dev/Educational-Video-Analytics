@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export type RootState = {
     page: String,
     popupOpened: boolean,
-    video: any
+    video: any,
 }
 
 

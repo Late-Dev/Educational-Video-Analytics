@@ -31,9 +31,9 @@ Chart.register(...registerables);
 
 // bar_data" : { "names" : [ "гнев", "грусть", "отвращение", "радость", "спокойствие", "страх", "удивление" ], "values" : [ 0.07174072510112016, 0.100061056220386, 0.025056007966937802, 0.28290127535625237, 0.468341065879695, 0.025505640514629852, 0.02639422875556299 ]
 
-const dataValues = computed(()=>videoCard.value.bar_data.values);
+const dataValues = computed(()=>videoCard.value.bar_data?.values);
 
-const dataLabels = computed(()=>videoCard.value.bar_data.names);
+const dataLabels = computed(()=>videoCard.value.bar_data?.names);
 
 const toggleLegend = ref(true); 
 // console.log(toggleLegend)
