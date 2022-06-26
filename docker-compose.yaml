@@ -64,10 +64,9 @@ services:
     runtime: nvidia
     build: ./cv_recognition_service
     entrypoint: python3 
-    command: infer.py -i /data/input-videos -o /data/output
+    command: infer.py -i /media/input-videos -o /media/output
     volumes:
-      - $PWD/cv_recognition_service/:/cv_recognition_service
-      - $PWD/data/:/data
+      - $PWD/media/:/media
 
 volumes:
   minio-storage:
