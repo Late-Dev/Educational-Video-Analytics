@@ -88,7 +88,7 @@ class InferFilesService(BaseService):
             height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
             fps = 10
-            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            fourcc = cv2.VideoWriter_fourcc(*"vp80")
             writer = cv2.VideoWriter(
                 str(output_dir / video_path.name), fourcc, fps, (width, height)
             )
