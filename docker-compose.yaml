@@ -22,8 +22,6 @@ services:
       - 9988:9988
     environment:
       - MONGO_HOST=mongo
-    volumes:
-      - $PWD/cv_recognition_service/:/cv_recognition_service
 
   mongo:
     image: mongo
