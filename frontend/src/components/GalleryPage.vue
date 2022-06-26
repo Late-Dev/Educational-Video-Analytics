@@ -120,8 +120,10 @@ const BUCKET_DOWNLOAD_NAME = process.env.VUE_APP_BUCKET_DOWNLOAD_NAME
 onMounted(async ()=>{
     const resp = await getVideoList()
     const data = resp.data
-    videos.value = data.map((video)=>{video.url=BUCKET_DOWNLOAD_NAME+video.url 
-    return video})
+    videos.value = data.map((video)=>{
+        video.url=BUCKET_DOWNLOAD_NAME+video.url 
+            return video
+        })
 })
 
 
