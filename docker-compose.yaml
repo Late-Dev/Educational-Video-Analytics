@@ -15,7 +15,6 @@ services:
       - 8080:8080
 
   cv-service:
-    runtime: nvidia
     build: ./cv_recognition_service
     # command: mkdir output/ && mkdir tmp/
     ports:

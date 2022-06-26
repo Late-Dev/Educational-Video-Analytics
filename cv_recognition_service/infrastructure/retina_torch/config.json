@@ -1,5 +1,5 @@
 {
-    "gpu": true,
+    "gpu": false,
     "confidence_threshold": 0.5,
     "top_k": 5000,
     "nms_threshold": 0.5,
