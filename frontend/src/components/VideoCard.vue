@@ -6,7 +6,7 @@
                 <div class="video-card__status-test" 
                 :class="{
                     'video-card__status-test--uploaded': video.status==='uploaded' ||video.status==='processing' ,
-                    'video-card__status-test--success': video.status==='success',
+                    'video-card__status-test--success': video.status==='ready',
                     'video-card__status-test--error': video.status==='error',
 
                     }">{{video.status}}</div>

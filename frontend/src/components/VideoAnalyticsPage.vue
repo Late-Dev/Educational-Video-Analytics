@@ -1,14 +1,22 @@
 <template>
     <div>
+        <BaseHeader>Аналитика загруженного видео</BaseHeader>
         <EmptyCard>
             <video :src="mainStore.video.url" controls></video>
-            <BarChart v-bind="barChartProps"></BarChart>
+            <p>
+              {{mainStore.video.name}}
+            </p>
+            
+        </EmptyCard>
+        <EmptyCard>
+          <BarChart v-bind="barChartProps"></BarChart>
         </EmptyCard>
     </div>
 </template>
 
 <script setup lang="ts">
 import EmptyCard from "./EmptyCard.vue"
+import BaseHeader from "./BaseHeader.vue"
 import { useMainStore } from "@/store/index";
 import { ref, computed, onMounted} from 'vue'
 
@@ -59,7 +67,7 @@ const testData = computed<ChartData<"bar">>(() => ({
 const options = computed<ChartOptions<"bar">>(() => ({
       scales: {
         myScale: {
-          type: "logarithmic",
+          type: "linear",
           position: toggleLegend.value ? "left" : "right",
         },
       },
