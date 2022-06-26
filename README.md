@@ -6,3 +6,6 @@
 
 - Запустите `docker-compose up`
 - Приложение побудет доступна по ссылке [на страницу](http://localhost:8080)
+
+### Пример работы
+![example](output.gif "Title")
