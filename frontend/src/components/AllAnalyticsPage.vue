@@ -47,6 +47,9 @@
                 <BaseButton  @click="search">Найти</BaseButton>
             </div>
         </EmptyCard>
+        <BarChartCard :dataValues="graph.values" :dataLabels="graph.names"  :key="graph" v-for="graph in graphs">
+           
+        </BarChartCard>
     </div>
 
 </template>
@@ -58,6 +61,10 @@ import BaseSelect from './BaseSelect.vue';
 import { onMounted, ref } from 'vue';
 import { getAnalytics } from '@/api/index'
 import BaseButton from './BaseButton.vue';
+import BarChartCard from './BarChartCard.vue';
+
+
+
 
 const typeAnal = ref('')
 
@@ -74,6 +81,8 @@ async function search(){
     const resp = await getAnalytics(typeAnal.value, typeVal.value, groupBy.value)
     graphs.value = resp.data
 }
+
+
 
 
 </script>
