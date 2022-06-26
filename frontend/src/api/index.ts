@@ -24,3 +24,13 @@ export function addVideo(payload: Video){
 export function getVideoList(){
     return axios.get('/get_video_list')
 }
+
+export function getVideoCard(_id: String){
+    return axios.get('/get_video_card', { params: {_id}})
+}
+
+export function getAnalytics(filter_type?: String, filter_value?: String, group?: String){
+    
+    return axios.get('/get_analytics', {params: {filter_type, filter_value, group}})
+}
+//teacher, subject, student

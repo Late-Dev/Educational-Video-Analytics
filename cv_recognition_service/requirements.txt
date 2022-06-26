@@ -1,10 +1,10 @@
 numpy
-opencv-python
+opencv-python==4.6.0.66
 tqdm
-matplotlib
+matplotlib==3.5.2
 torch
 torchvision
 scikit-image
-pandas
 pymongo==4.1.1
-tensorflow-gpu
+tensorflow-gpu==2.9.1
+gdown==4.5.0
