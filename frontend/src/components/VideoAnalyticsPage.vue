@@ -33,7 +33,7 @@ import { useMainStore } from "@/store/index";
 import { ref, computed, onMounted} from 'vue'
 
 import { BarChart, useBarChart } from "vue-chart-3";
-import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
+import { Chart,  registerables } from "chart.js";
 import { getVideoCard } from '@/api/index'
 import BaseSelect from "./BaseSelect.vue";
 import LineChartCard from "./LineChartCard.vue";
@@ -77,7 +77,7 @@ function selectStudent(name){
 const toggleLegend = ref(true); 
 // console.log(toggleLegend)
 
-const testData = computed<ChartData<"bar">>(() => ({
+const testData = computed(() => ({
       labels: dataLabels.value,
       datasets: [
         {
@@ -95,7 +95,7 @@ const testData = computed<ChartData<"bar">>(() => ({
       ],
     }));
 
-const options = computed<ChartOptions<"bar">>(() => ({
+const options = computed(() => ({
       scales: {
         myScale: {
           type: "linear",

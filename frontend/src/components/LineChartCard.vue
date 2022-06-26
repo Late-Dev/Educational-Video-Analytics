@@ -24,12 +24,14 @@ const props = defineProps({
 })
 
 const testData = computed(() => ({
-      datasets: [
-        {
-          data: props.dataValues,
-        },
-      ],
-    }));
+  labels:[...Array(props.dataValues.length).keys()],
+  datasets: [
+      {
+        data: props.dataValues,
+      },
+    ],
+  })
+);
 
 
 const options = computed(() => ({
@@ -40,7 +42,8 @@ const options = computed(() => ({
       },
       plugins: {
       },
-    }));
+  })
+);
 
 
 
