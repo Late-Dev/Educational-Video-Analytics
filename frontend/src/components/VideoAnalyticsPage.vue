@@ -18,12 +18,15 @@
           <template #header>
                 Состояние отдельного ученика за урок
             </template>
-            <BaseSelect :options="lineOptions" label="Имя ученика"></BaseSelect>
+            <BaseSelect @input="selectStudent" :options="lineOptions" label="Имя ученика"></BaseSelect>
         </EmptyCard>
+        <div>
+          <LineChartCard :dataValues="dt" v-for="dt, name in lineData" :key="dt" class="analytics__card" :header="name"></LineChartCard>
+        </div>
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup >
 import EmptyCard from "./EmptyCard.vue"
 import BaseHeader from "./BaseHeader.vue"
 import { useMainStore } from "@/store/index";
@@ -33,6 +36,7 @@ import { BarChart, useBarChart } from "vue-chart-3";
 import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
 import { getVideoCard } from '@/api/index'
 import BaseSelect from "./BaseSelect.vue";
+import LineChartCard from "./LineChartCard.vue";
 
 
 const mainStore = useMainStore();
@@ -43,7 +47,7 @@ onMounted(async ()=>{
   videoCard.value = resp.data
 })
 
-const videoCard = ref({} as any)
+const videoCard = ref({} )
 
 Chart.register(...registerables);
 
@@ -62,6 +66,13 @@ const lineOptions = computed(()=>{
   } 
   return [{label:'', value:''}]
 })
+
+const lineData = ref([])
+
+function selectStudent(name){
+  lineData.value = videoCard.value.line_data[name]
+  console.log(lineData.value)
+}
 
 const toggleLegend = ref(true); 
 // console.log(toggleLegend)
