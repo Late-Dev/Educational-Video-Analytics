@@ -31,7 +31,7 @@ def process_video(video_path: str):
     height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
     fps = 10
-    fourcc = cv2.VideoWriter_fourcc(*'MP4V')
+    fourcc = cv2.VideoWriter_fourcc(*'h264')
     out_path = f'output/{os.path.basename(video_path)}'
     writer = cv2.VideoWriter(out_path, fourcc, fps, (width, height))
 
