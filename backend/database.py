@@ -29,8 +29,10 @@ async def get_video_list_data():
     videos = []
     async for video in lesson_videos_collection.find():
         video['_id'] = str(video['_id'])
-        del video['bar_data']
-        del video['line_data']
+        if 'bar_data' in video:
+            del video['bar_data']
+        if 'line_data' in video:
+            del video['line_data']
         videos.append(video)
     return videos
 
