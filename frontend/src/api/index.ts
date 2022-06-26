@@ -24,3 +24,7 @@ export function addVideo(payload: Video){
 export function getVideoList(){
     return axios.get('/get_video_list')
 }
+
+export function getVideoCard(_id: String){
+    return axios.get('/get_video_card', { params: {_id}})
+}

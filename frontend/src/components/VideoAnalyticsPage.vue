@@ -10,24 +10,33 @@
 <script setup lang="ts">
 import EmptyCard from "./EmptyCard.vue"
 import { useMainStore } from "@/store/index";
-import {ref, computed} from 'vue'
+import { ref, computed, onMounted} from 'vue'
 
 import { BarChart, useBarChart } from "vue-chart-3";
 import { Chart, ChartData, ChartOptions, registerables } from "chart.js";
+import { getVideoCard } from '@/api/index'
+
 
 const mainStore = useMainStore();
 
+onMounted(async ()=>{
+  const resp = await getVideoCard(mainStore.video._id)
+  console.log(resp)
+  videoCard.value = resp.data
+})
+
+const videoCard = ref({} as any)
 
 Chart.register(...registerables);
 
 // bar_data" : { "names" : [ "гнев", "грусть", "отвращение", "радость", "спокойствие", "страх", "удивление" ], "values" : [ 0.07174072510112016, 0.100061056220386, 0.025056007966937802, 0.28290127535625237, 0.468341065879695, 0.025505640514629852, 0.02639422875556299 ]
 
-const dataValues = computed(()=>mainStore.video.bar_data.values);
+const dataValues = computed(()=>videoCard.value.bar_data.values);
 
-const dataLabels = computed(()=>mainStore.video.bar_data.names);
+const dataLabels = computed(()=>videoCard.value.bar_data.names);
 
 const toggleLegend = ref(true); 
-console.log(toggleLegend)
+// console.log(toggleLegend)
 
 const testData = computed<ChartData<"bar">>(() => ({
       labels: dataLabels.value,
@@ -62,13 +71,13 @@ const options = computed<ChartOptions<"bar">>(() => ({
     }));
 
 
-const { barChartProps, barChartRef } = useBarChart({
+const { barChartProps } = useBarChart({
     // @ts-ignore
       chartData: testData,
       options,
     });
 
-console.log(barChartRef)
+// console.log(barChartRef)
 
 
 </script>
