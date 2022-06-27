@@ -47,7 +47,7 @@
                 <BaseButton  @click="search">Найти</BaseButton>
             </div>
         </EmptyCard>
-        <BarChartCard :dataValues="graph.values" :dataLabels="graph.names"  :key="graph" v-for="graph in graphs">
+        <BarChartCard class="cardbar" :header="name" :dataValues="graph.values" :dataLabels="graph.names"  :key="graph" v-for="graph, name in graphs">
            
         </BarChartCard>
     </div>
@@ -97,6 +97,10 @@ async function search(){
     width: 300px;
     margin-top: 25px;
     margin-left: auto;
+}
+
+.cardbar{
+    margin-top: 25px;
 }
 
 </style>
